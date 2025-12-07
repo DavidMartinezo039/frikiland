@@ -23,11 +23,12 @@
     </head>
     
     <body>
+        <!-- BANNER SUPERIOR 1 FIJO -->
         <div class="wrap-main-nav">
             @if (Route::has('login'))
                 <nav class="main-nav">
                     <div class="nav-logo">
-                        <p>FRIKILAND</p>
+                        <h1>FRIKILAND</h1>
                     </div>
 
                     <div class="auth-nav">
@@ -45,27 +46,42 @@
             @endif
         </div>
 
-        <div class="wrap-select-web">
-
-            <button class="btn-store">
-                <span>Store</span>
-            </button>
-
-            <input type="radio" name="selector" id="social">
-            <label for="social" class="select-web">Red</label>
-
+        <!-- TOP TABS -->
+        <div class="top-tabs">
+            <a href="/">For you</a>
+            <a href="/">Following</a>
         </div>
 
+        <!-- LAYOUT PRINCIPAL -->
+        <div class="main-layout">
 
-        <div class="layout-container">
-            <a href="/para ti">For you</a>
-            <a href="/siguiendo">Following</a>
-            <a href="/mensajes">Chat</a>
+            <!-- SIDEBAR IZQUIERDO FIJO -->
+            <div class="sidebar-left">
+
+                <div class="wrap-select-web">
+                    <div class="row-store">
+                        <div class="btn-store">
+                            <a href="/">Store</a>
+                        </div>
+
+                        <div class="btn-store">
+                            <a href="/">Red</a>
+                        </div>
+                    </div>
+
+                    <div class="nav-colum">
+                        <a href="/">Notification</a>
+                        <a href="/">Chat</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="content-web">
+                <livewire:posts />
+                <livewire:posts-feed />
+            </div>
         </div>
-
-        <main class="content-area">
-            <livewire:posts />
-            <livewire:posts-feed />
-        </main>
     </body>
 </html>
