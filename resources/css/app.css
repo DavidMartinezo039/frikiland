@@ -7,10 +7,21 @@
 }
 
 @layer components {
-    @import './components/header.css';
+    /* HEADER */
+    @import './components/header/header.css';
+    @import './components/header/dropdown-user.css';
+
+    /* FOOTER */
     @import './components/footer.css';
+
+    /* BANNERS */
     @import './components/banner-cat.css';
+
+    /* LOGIN */
     @import './login.css';
+
+    /* USERS */
+    @import './users/edit-profile.css';
 
     /* PAGES */
     @import './pages/home.css';

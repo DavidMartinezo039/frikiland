@@ -1,0 +1,8 @@
+.wrap-edit-profile {
+    display: flex;
+    justify-content: center;
+}
+
+.max-md\:flex-col {
+    width: 700px;
+}

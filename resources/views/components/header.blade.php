@@ -22,16 +22,34 @@
 
         @if (Route::has('login'))
             <div class="auth-nav">
+
                 @auth
-                    <a href="{{ url('/dashboard') }}">
-                        <i class='bx bx-user icon-log'></i>
-                    </a>
+                    <div class="user-menu">
+                        <button class="user-avatar-btn" onclick="toggleUserMenu(event)">
+                            <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/default-avatar.png') }}"
+                                alt="Avatar" class="user-avatar">
+                        </button>
+
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="{{ route('profile.edit') }}">Profile</a>
+                            <a href="{{ route('profile.edit') }}">Edit Profile</a>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="logout-btn">
+                                    Sign out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 @else
                     <a href="{{ route('login') }}">
                         <i class='bx bx-user icon-log'></i>
                     </a>
                 @endauth
+
             </div>
         @endif
+
     </div>
 </header>

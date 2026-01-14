@@ -1,3 +1,3 @@
-<nav class="banner-categories banner-categories-web">
+<nav {{ $attributes->merge(['class' => 'banner-categories banner-categories-web']) }}>
     {{ $slot }}
 </nav>
