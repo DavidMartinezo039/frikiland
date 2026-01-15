@@ -1,0 +1,46 @@
+/************************************
+ * PERFIL SUPERIOR (INFO USUARIO)
+ ************************************/
+.wrap-profile-users {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-users {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 1000px;
+    padding-inline: 10px;
+}
+
+.profile-users img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.wrap-profile-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.wrap-profile-content p {
+    font-size: 18px;
+    margin: 0;
+}
+
+.profile-users-sub {
+    display: flex;
+    gap: 8px;
+    margin-block: 5px;
+    font-size: 14px;
+}
+
+.biography {
+    margin: 5px 0px 15px;
+    padding: 0px 10px 10px;
+    border-bottom: 2px solid var(--color-gris-muy-claro);
+}

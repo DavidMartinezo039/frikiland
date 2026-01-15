@@ -26,8 +26,7 @@
                 @auth
                     <div class="user-menu">
                         <button class="user-avatar-btn" onclick="toggleUserMenu(event)">
-                            <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/default-avatar.png') }}"
-                                alt="Avatar" class="user-avatar">
+                            <img src="{{ auth()->user()->avatar ? asset(auth()->user()->avatar) : asset('images/default-avatar.png') }}">
                         </button>
 
                         <div class="user-dropdown" id="userDropdown">

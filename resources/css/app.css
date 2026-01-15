@@ -22,6 +22,7 @@
 
     /* USERS */
     @import './users/edit-profile.css';
+    @import './users/profile.css';
 
     /* PAGES */
     @import './pages/home.css';

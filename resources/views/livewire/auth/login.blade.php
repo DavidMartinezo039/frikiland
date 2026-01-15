@@ -10,50 +10,19 @@
 
                     <h1>Login</h1>
 
-                    {{-- Email --}}
-                    <div class="input-box">
-                        <input
-                            type="email"
-                            name="email"
-                            value="{{ old('form') === 'login' ? old('email') : '' }}"
-                            placeholder="Email"
-                            required
-                            autofocus
-                        >
-                        <i class="bx bxs-user"></i>
+                    <x-input.auth-input type="email" name="email" placeholder="Email" icon="bxs-user" :value="old('form') === 'login' ? old('email') : ''"
+                        required autofocus form="login" />
 
-                        @if (old('form') === 'login')
-                            @error('email')
-                                <small class="error-text">{{ $message }}</small>
-                            @enderror
-                        @endif
-                    </div>
+                    <x-input.auth-input type="password" name="password" placeholder="Password" icon="bxs-lock-alt" required
+                        form="login" />
 
-                    {{-- Password --}}
-                    <div class="input-box">
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder="Password"
-                            required
-                        >
-                        <i class="bx bxs-lock-alt"></i>
-
-                        <label class="show-password">
-                            <input type="checkbox" onclick="togglePassword()" style="width:12px">
-                            Show Password
-                        </label>
-
-                        @if (old('form') === 'login')
-                            @error('password')
-                                <small class="error-text">{{ $message }}</small>
-                            @enderror
-                        @endif
-                    </div>
+                    <label class="show-password">
+                        <input type="checkbox" onclick="togglePassword()" style="width:12px">
+                        Show Password
+                    </label>
 
                     @if (Route::has('password.request'))
-                        <div class="forgot-link">
+                        <div class="forgot-link" style="margin-top:5px;">
                             <a href="{{ route('password.request') }}">Forgot password?</a>
                         </div>
                     @endif
@@ -70,83 +39,17 @@
 
                     <h1>Register</h1>
 
-                    {{-- Name --}}
-                    <div class="input-box">
-                        <input
-                            type="text"
-                            name="name"
-                            value="{{ old('name') }}"
-                            placeholder="Name"
-                            required
-                        >
-                        <i class="bx bxs-user"></i>
+                    <x-input.auth-input name="name" placeholder="Name" icon="bxs-user" :value="old('name')" required />
 
-                        @error('name')
-                            <small class="error-text">{{ $message }}</small>
-                        @enderror
-                    </div>
+                    <x-input.auth-input name="username" placeholder="Username" icon="bxs-user" :value="old('username')" required />
 
-                    {{-- Username --}}
-                    <div class="input-box">
-                        <input
-                            type="text"
-                            name="username"
-                            value="{{ old('username') }}"
-                            placeholder="Username"
-                            required
-                        >
-                        <i class="bx bxs-user"></i>
+                    <x-input.auth-input type="email" name="email" placeholder="Email" icon="bxs-envelope"
+                        :value="old('email')" required />
 
-                        @error('username')
-                            <small class="error-text">{{ $message }}</small>
-                        @enderror
-                    </div>
+                    <x-input.auth-input type="password" name="password" placeholder="Password" icon="bxs-lock-alt" required />
 
-                    {{-- Email --}}
-                    <div class="input-box">
-                        <input
-                            type="email"
-                            name="email"
-                            value="{{ old('email') }}"
-                            placeholder="Email"
-                            required
-                        >
-                        <i class="bx bxs-envelope"></i>
-
-                        @error('email')
-                            <small class="error-text">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    {{-- Password --}}
-                    <div class="input-box">
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            required
-                        >
-                        <i class="bx bxs-lock-alt"></i>
-
-                        @error('password')
-                            <small class="error-text">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    {{-- Confirm Password --}}
-                    <div class="input-box">
-                        <input
-                            type="password"
-                            name="password_confirmation"
-                            placeholder="Confirm Password"
-                            required
-                        >
-                        <i class="bx bxs-lock-alt"></i>
-
-                        @error('password_confirmation')
-                            <small class="error-text">{{ $message }}</small>
-                        @enderror
-                    </div>
+                    <x-input.auth-input type="password" name="password_confirmation" placeholder="Confirm Password"
+                        icon="bxs-lock-alt" required />
 
                     <button type="submit" class="btn">Register</button>
                 </form>

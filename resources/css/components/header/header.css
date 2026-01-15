@@ -31,6 +31,7 @@
 .title-header {
     font-size: 32px;
     font-weight: bold;
+    width: 222.43px;
 }
 
 /* Icono Hamburguesa */
@@ -97,4 +98,10 @@
     font-size: 27px;
     width: 222.43px;
     justify-content: flex-end;
+}
+
+.user-avatar-btn img {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
 }

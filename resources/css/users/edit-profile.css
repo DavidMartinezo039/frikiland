@@ -1,8 +1,116 @@
-.wrap-edit-profile {
+/************************************
+ * UTILIDADES GENERALES
+ ************************************/
+.flex-center {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-.max-md\:flex-col {
-    width: 700px;
+
+/************************************
+ * FORMULARIO EDIT PROFILE
+ ************************************/
+.form-edit-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrap-form-edit-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+}
+
+.content-left {
+    width: 570px;
+}
+
+.content-rigth {
+    width: 500px;
+}
+
+.bio {
+    display: flex;
+    flex-direction: column;
+}
+
+/************************************
+ * AVATAR PICKER – CONTENEDOR
+ ************************************/
+.avatar-picker {
+    height: 524px;
+}
+
+
+/************************************
+ * AVATARES (SELECTOR)
+ ************************************/
+.wrap-avatar {
+    padding-top: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.wrap-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.wrap-avatar img.active {
+    border-color: #22c55e;
+}
+
+
+/************************************
+ * PREVIEW AVATAR (PICKER)
+ ************************************/
+.preview-avatar {
+    padding-right: 10px;
+    border-right: 2px solid var(--color-gris-claro);
+    display: flex;
+    align-items: center;
+}
+
+.preview-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+
+/************************************
+ * DRAG & DROP UPLOAD
+ ************************************/
+.drag-drop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    height: 276px;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #f9f9f9;
+    transition: all 0.2s ease;
+}
+
+.drag-drop:hover {
+    background-color: var(--color-azul-claro);
+}
+
+
+/************************************
+ * MENSAJES / FEEDBACK
+ ************************************/
+.success-message {
+    font-size: 14px;
+    font-weight: 500;
 }
