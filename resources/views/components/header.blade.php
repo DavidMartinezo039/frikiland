@@ -22,7 +22,6 @@
 
         @if (Route::has('login'))
             <div class="auth-nav">
-
                 @auth
                     <div class="user-menu">
                         <button class="user-avatar-btn" onclick="toggleUserMenu(event)">
@@ -46,9 +45,7 @@
                         <i class='bx bx-user icon-log'></i>
                     </a>
                 @endauth
-
             </div>
         @endif
-
     </div>
 </header>

@@ -99,15 +99,15 @@ new class extends Component {
                         <span>x posts</span>
                     </div>
                 </div>
+
+                <div class="delete-profile">
+                    <livewire:settings.delete-user-form />
+                </div>
             </div>
 
-            <div class="">
-                <p class="biography ">{{ $this->bio }}</p>
-            </div>
+            <p class="biography ">{{ $this->bio }}</p>
         </div>
     </div>
-
-
 
     <form wire:submit="updateProfileInformation" class="form-edit-profile">
         <div class="wrap-form-edit-profile">
@@ -116,17 +116,13 @@ new class extends Component {
             </div>
 
             <div class="content-rigth">
-                {{-- Name --}}
                 <x-input.profile-input label="Name" model="name" required />
 
-                {{-- Username --}}
                 <x-input.profile-input label="Username" model="username" required />
 
-                {{-- Bio --}}
                 <x-input.profile-input label="Biography" model="bio"
                     placeholder="Tell something about yourself..." />
 
-                {{-- Email --}}
                 <x-input.profile-input label="Email" model="email" type="email" required />
 
                 {{-- Email verification --}}
@@ -158,6 +154,4 @@ new class extends Component {
             </div>
         </div>
     </form>
-
-    <livewire:settings.delete-user-form />
 </section>
