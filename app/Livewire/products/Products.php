@@ -25,6 +25,19 @@ class Products extends Component
         'images.*' => 'image|max:2048', // Validación de imágenes
     ];
 
+    public $selected_product = null;
+
+    public function showProduct($id)
+    {
+        $this->selected_product = Product::findOrFail($id);
+    }
+
+    // Método para volver al listado
+    public function closeDetails()
+    {
+        $this->selected_product = null;
+    }
+
     public function addProduct()
     {
         $this->validate();
