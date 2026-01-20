@@ -5,7 +5,7 @@ use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 use App\Livewire\Pages\SocialWeb;
 use App\Livewire\Pages\ShopWeb;
-use App\Livewire\Posts\PostShow;
+use App\Livewire\Posts\ShowPost;
 
 Route::get('/', function () {
     return view('home');
@@ -26,7 +26,8 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/posts/{post}', PostShow::class)
+
+    Route::get('/posts/{post}', ShowPost::class)
         ->name('posts.show');
 
     Route::redirect('settings', 'settings/profile');

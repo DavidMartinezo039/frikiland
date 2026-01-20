@@ -200,6 +200,7 @@
 .create-actions {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .left-actions {
