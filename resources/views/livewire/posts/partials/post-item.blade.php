@@ -20,11 +20,12 @@
             <a href="{{ route('posts.show', $post) }}" class="comment-link">
                 <span>
                     <i class="bx bx-message-rounded"></i>
-                    {{ $post->replies->count() }}
+                    {{ $post->comments_count }}
                 </span>
             </a>
 
             <livewire:posts.favorite-post :post="$post" :wire:key="'favorite-post-'.$post->id" />
         </div>
     </div>
+
 </article>

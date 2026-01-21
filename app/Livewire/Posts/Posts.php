@@ -61,8 +61,7 @@ class Posts extends Component
             return;
         }
 
-        $newPosts = Post::whereNull('parent_id')
-            ->with(['user', 'replies'])
+        $newPosts = Post::with('user')
             ->latest()
             ->skip($this->loaded)
             ->take($this->perPage)

@@ -14,6 +14,7 @@
 /* ====== TARJETA POST ====== */
 .posts {
     padding: 16px;
+    margin-top: 5px;
     margin-bottom: 18px;
     border-radius: 14px;
     background-color: #29373f;
@@ -275,4 +276,8 @@
 
 .btn-delete-post {
     color: #b91c1c !important;
+}
+
+.btn-cancel-replies {
+    color: var(--color-blanco);
 }
