@@ -61,4 +61,14 @@ class PostComment extends Model
             ->where('user_id', $user->id)
             ->exists();
     }
+
+    public function shares()
+    {
+        return $this->morphMany(Share::class, 'shareable');
+    }
+
+    public function isSharedBy(User $user): bool
+    {
+        return $this->shares()->where('user_id', $user->id)->exists();
+    }
 }

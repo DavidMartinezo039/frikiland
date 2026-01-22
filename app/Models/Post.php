@@ -45,9 +45,13 @@ class Post extends Model
         return $this->favorites()->where('user_id', $user->id)->exists();
     }
 
-    public function sharedBy()
+    public function shares()
     {
-        return $this->belongsToMany(User::class, 'shares')
-            ->withTimestamps();
+        return $this->morphMany(Share::class, 'shareable');
+    }
+
+    public function isSharedBy(User $user): bool
+    {
+        return $this->shares()->where('user_id', $user->id)->exists();
     }
 }

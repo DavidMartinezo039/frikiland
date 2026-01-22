@@ -1,9 +1,11 @@
-<article class="posts" wire:key="post-{{ $post->id }}">
+@php
+    $context = $this->getName();
+@endphp
+
+<article class="posts" wire:key="post-{{ $context }}-{{ $post->id }}">
     @include('livewire.posts.partials.post-actions', ['post' => $post])
 
-    <p class="text-main-content">
-        {{ $post->content }}
-    </p>
+    <p class="text-main-content">{{ $post->content }}</p>
 
     @if ($post->media)
         <div class="content-img">
@@ -14,7 +16,6 @@
         </div>
     @endif
 
-    {{-- ICONOS --}}
     <div class="content-icons">
         <div class="content-icons-left">
             <a href="{{ route('posts.show', $post) }}" class="comment-link">
@@ -24,10 +25,9 @@
                 </span>
             </a>
 
-            <livewire:favorite-content :model="$post" />
+            <livewire:favorite-content :model="$post" wire:key="fav-{{ $context }}-post-{{ $post->id }}" />
 
-            <livewire:posts.shared-post :post="$post" :wire:key="'shared-'.$post->id" />
+            <livewire:shared-content :model="$post" wire:key="shared-{{ $context }}-post-{{ $post->id }}" />
         </div>
     </div>
-
 </article>

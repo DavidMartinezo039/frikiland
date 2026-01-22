@@ -75,10 +75,14 @@
                     {{ $tab === 'favorites' ? 'Este usuario tiene los favoritos privados.' : 'No hay contenido para mostrar.' }}
                 </p>
             @else
+                @php
+                    $context = $this->getName() . '-' . $tab;
+                @endphp
+
                 @foreach ($posts as $item)
                     {{-- POST --}}
                     @if ($item instanceof \App\Models\Post)
-                        <article class="posts">
+                        <article class="posts" wire:key="post-{{ $context }}-{{ $item->id }}">
                             <div class="wrap-profile">
                                 <a href="{{ route('user.profile', $item->user->username) }}" class="profile-link">
                                     <img src="{{ asset($item->user->avatar) }}" class="img-profile">
@@ -114,10 +118,11 @@
                                         </span>
                                     </a>
 
-                                    <livewire:favorite-content :model="$item" :wire:key="'fav-post-'.$item->id" />
+                                    <livewire:favorite-content :model="$item"
+                                        wire:key="fav-{{ $context }}-post-{{ $item->id }}" />
 
-                                    <livewire:posts.shared-post :post="$item"
-                                        :wire:key="'shared-post-'.$item->id" />
+                                    <livewire:shared-content :model="$item"
+                                        wire:key="shared-{{ $context }}-post-{{ $item->id }}" />
                                 </div>
                             </div>
                         </article>
@@ -125,7 +130,7 @@
 
                     {{-- COMENTARIO --}}
                     @if ($item instanceof \App\Models\PostComment)
-                        <article class="posts">
+                        <article class="posts" wire:key="comment-{{ $context }}-{{ $item->id }}">
                             <div class="wrap-profile">
                                 <a href="{{ route('user.profile', $item->user->username) }}" class="profile-link">
                                     <img src="{{ asset($item->user->avatar) }}" class="img-profile">
@@ -162,14 +167,17 @@
                                         </span>
                                     </a>
 
-                                    <livewire:favorite-content :model="$item" :wire:key="'fav-comment-'.$item->id" />
+                                    <livewire:favorite-content :model="$item"
+                                        wire:key="fav-{{ $context }}-comment-{{ $item->id }}" />
+
+                                    <livewire:shared-content :model="$item"
+                                        wire:key="shared-{{ $context }}-comment-{{ $item->id }}" />
                                 </div>
                             </div>
                         </article>
                     @endif
                 @endforeach
             @endif
-
         </section>
     </main>
 </div>

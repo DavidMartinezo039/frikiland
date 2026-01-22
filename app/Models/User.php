@@ -145,9 +145,26 @@ class User extends Authenticatable
     }
 
     // Posts compartidos
+    public function shares()
+    {
+        return $this->hasMany(Share::class);
+    }
+
     public function sharedPosts()
     {
-        return $this->belongsToMany(Post::class, 'shares')
-            ->withTimestamps();
+        return $this->shares()
+            ->where('shareable_type', Post::class)
+            ->with('shareable')
+            ->get()
+            ->pluck('shareable');
+    }
+
+    public function sharedComments()
+    {
+        return $this->shares()
+            ->where('shareable_type', PostComment::class)
+            ->with('shareable')
+            ->get()
+            ->pluck('shareable');
     }
 }

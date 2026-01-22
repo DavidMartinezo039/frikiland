@@ -8,5 +8,7 @@
         </button>
 
         <livewire:favorite-content :model="$comment" :wire:key="'fav-comment-'.$comment->id" />
+
+        <livewire:shared-content :model="$comment" :wire:key="'share-comment-'.$comment->id" />
     </div>
 </div>
