@@ -17,42 +17,77 @@
 
     <main class="main-content-privacy">
         <div class="content-privacy">
-            <h2>~ Configuracion de Privacidad ~</h2>
+            <h2>~ Configuración de Privacidad ~</h2>
 
-            <div class="content-privacy-box">
-                <button class="privacy-title" wire:click="toggle">
+            {{-- FAVORITES --}}
+            <div class="content-privacy-box mb-5">
+                <button class="privacy-title" wire:click="toggleFavorites">
                     Publicaciones favoritas
-                    <i class="bx {{ $open ? 'bx-chevron-up' : 'bx-chevron-down' }}"></i>
+                    <i class="bx {{ $openFavorites ? 'bx-chevron-up' : 'bx-chevron-down' }}"></i>
                 </button>
 
-                @if ($open)
+                @if ($openFavorites)
                     <div class="privacy-options">
-                        <label class="privacy-card {{ $visibility === 'public' ? 'active' : '' }}">
-                            <input type="radio" wire:model="visibility" value="public">
+                        <label class="privacy-card {{ $favoritesVisibility === 'public' ? 'active' : '' }}">
+                            <input type="radio" wire:model="favoritesVisibility" value="public">
                             🌍 Público
                         </label>
 
-                        <label class="privacy-card {{ $visibility === 'followers' ? 'active' : '' }}">
-                            <input type="radio" wire:model="visibility" value="followers">
+                        <label class="privacy-card {{ $favoritesVisibility === 'followers' ? 'active' : '' }}">
+                            <input type="radio" wire:model="favoritesVisibility" value="followers">
                             👥 Solo seguidores
                         </label>
 
-                        <label class="privacy-card {{ $visibility === 'private' ? 'active' : '' }}">
-                            <input type="radio" wire:model="visibility" value="private">
+                        <label class="privacy-card {{ $favoritesVisibility === 'private' ? 'active' : '' }}">
+                            <input type="radio" wire:model="favoritesVisibility" value="private">
                             🔒 Privado
                         </label>
 
-                        <button class="btn-save-privacy" wire:click="save">
+                        <button class="btn-save-privacy" wire:click="saveFavorites">
                             Guardar
                         </button>
                     </div>
                 @endif
 
-                @if ($saved)
+                @if ($savedFavorites)
                     <small class="saved-msg">Configuración guardada</small>
                 @endif
             </div>
 
+            {{-- SHARED --}}
+            <div class="content-privacy-box">
+                <button class="privacy-title" wire:click="toggleShared">
+                    Publicaciones compartidas
+                    <i class="bx {{ $openShared ? 'bx-chevron-up' : 'bx-chevron-down' }}"></i>
+                </button>
+
+                @if ($openShared)
+                    <div class="privacy-options">
+                        <label class="privacy-card {{ $sharedVisibility === 'public' ? 'active' : '' }}">
+                            <input type="radio" wire:model="sharedVisibility" value="public">
+                            🌍 Público
+                        </label>
+
+                        <label class="privacy-card {{ $sharedVisibility === 'followers' ? 'active' : '' }}">
+                            <input type="radio" wire:model="sharedVisibility" value="followers">
+                            👥 Solo seguidores
+                        </label>
+
+                        <label class="privacy-card {{ $sharedVisibility === 'private' ? 'active' : '' }}">
+                            <input type="radio" wire:model="sharedVisibility" value="private">
+                            🔒 Privado
+                        </label>
+
+                        <button class="btn-save-privacy" wire:click="saveShared">
+                            Guardar
+                        </button>
+                    </div>
+                @endif
+
+                @if ($savedShared)
+                    <small class="saved-msg">Configuración guardada</small>
+                @endif
+            </div>
         </div>
     </main>
 </section>

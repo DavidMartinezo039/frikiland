@@ -101,17 +101,13 @@ class User extends Authenticatable
         )->withTimestamps();
     }
 
-    /**
-     * Privacidad de contenidos (favorites, shared, etc.)
-     */
+
+    /* Privacidad */
     public function contentPrivacies()
     {
         return $this->hasMany(ContentPrivacy::class);
     }
 
-    /**
-     * Obtener visibilidad de un tipo de contenido
-     */
     public function privacyFor(string $type): string
     {
         return $this->contentPrivacies
@@ -120,9 +116,9 @@ class User extends Authenticatable
             ?->visibility ?? 'public';
     }
 
-    public function canViewFavorites(?User $viewer = null): bool
+    protected function canViewContent(string $type, ?User $viewer = null): bool
     {
-        $visibility = $this->privacyFor('favorites');
+        $visibility = $this->privacyFor($type);
 
         if ($visibility === 'public') {
             return true;
@@ -138,11 +134,24 @@ class User extends Authenticatable
 
         if ($visibility === 'followers') {
             return $viewer->id === $this->id
-                || $this->followers()->where('follower_id', $viewer->id)->exists();
+                || $this->followers()
+                ->where('follower_id', $viewer->id)
+                ->exists();
         }
 
         return false;
     }
+
+    public function canViewFavorites(?User $viewer = null): bool
+    {
+        return $this->canViewContent('favorites', $viewer);
+    }
+
+    public function canViewShared(?User $viewer = null): bool
+    {
+        return $this->canViewContent('shared', $viewer);
+    }
+
 
     // Posts compartidos
     public function shares()

@@ -7,39 +7,71 @@ use Illuminate\Support\Facades\Auth;
 
 class ContentPrivacy extends Component
 {
-    public string $type = 'favorites';
-    public string $visibility = 'public';
+    /** VISIBILIDADES */
+    public string $favoritesVisibility = 'public';
+    public string $sharedVisibility = 'public';
 
-    public bool $open = false;
-    public bool $saved = false;
+    /** UI STATES */
+    public bool $openFavorites = false;
+    public bool $openShared = false;
+
+    public bool $savedFavorites = false;
+    public bool $savedShared = false;
 
     public function mount()
     {
-        $privacy = Auth::user()
-            ->contentPrivacies()
-            ->where('type', $this->type)
+        $user = Auth::user();
+
+        $favorites = $user->contentPrivacies()
+            ->where('type', 'favorites')
             ->first();
 
-        $this->visibility = $privacy->visibility ?? 'public';
+        $shared = $user->contentPrivacies()
+            ->where('type', 'shared')
+            ->first();
+
+        $this->favoritesVisibility = $favorites->visibility ?? 'public';
+        $this->sharedVisibility = $shared->visibility ?? 'public';
     }
 
-    public function toggle()
+    /* TOGGLES */
+    public function toggleFavorites()
     {
-        $this->open = ! $this->open;
-        $this->saved = false;
+        $this->openFavorites = ! $this->openFavorites;
+        $this->savedFavorites = false;
     }
 
-    public function save()
+    public function toggleShared()
+    {
+        $this->openShared = ! $this->openShared;
+        $this->savedShared = false;
+    }
+
+    /* SAVES */
+    public function saveFavorites()
     {
         Auth::user()
             ->contentPrivacies()
             ->updateOrCreate(
-                ['type' => $this->type],
-                ['visibility' => $this->visibility]
+                ['type' => 'favorites'],
+                ['visibility' => $this->favoritesVisibility]
             );
 
-        $this->saved = true;
-        $this->open = false;
+        $this->savedFavorites = true;
+        $this->openFavorites = false;
+    }
+
+    public function saveShared()
+    {
+        Auth::user()
+            ->contentPrivacies()
+            ->updateOrCreate(
+                ['type' => 'shared'],
+                ['visibility' => $this->sharedVisibility]
+            );
+
+        $this->savedShared = true;
+        $this->openShared = false;
     }
 
     public function render()

@@ -14,7 +14,7 @@ class FollowUser extends Component
     public User $user;
     public bool $isFollowing = false;
 
-    public function mount(User $user)
+    public function mount(User $user): void
     {
         $this->user = $user;
 
@@ -38,8 +38,7 @@ class FollowUser extends Component
             ->following()
             ->toggle($this->user->id);
 
-        $this->isFollowing = ! $this->isFollowing;
-        $this->dispatch('followUpdated');
+        return redirect(request()->header('Referer'));
     }
 
     public function render()
