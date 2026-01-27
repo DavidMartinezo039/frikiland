@@ -28,7 +28,13 @@
     </x-banner-categories>
 
     <!-- POSTS -->
-    <div class="content-web">
-        <livewire:posts.posts />
-    </div>
+    <main class="wrap-main">
+        <section class="main-content">
+            @if (request()->is('social-web/following'))
+                <livewire:posts.posts-following />
+            @else
+                <livewire:posts.posts-for-you />
+            @endif
+        </section>
+    </main>
 </div>

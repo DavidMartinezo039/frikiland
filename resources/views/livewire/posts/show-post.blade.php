@@ -16,6 +16,14 @@
 
             {{-- COMENTARIOS --}}
             <livewire:posts.post-comments :post-id="$post->id" wire:key="post-comments-{{ $post->id }}" />
+
+            @if ($editing)
+                @include('livewire.posts.modals.edit-post')
+            @endif
+
+            @if ($confirmingDelete)
+                @include('livewire.posts.modals.delete-post')
+            @endif
         </section>
     </main>
 </div>
