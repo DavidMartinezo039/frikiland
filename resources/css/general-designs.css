@@ -55,3 +55,7 @@ a i:hover {
 .lg\:p-8 {
     padding: 0 !important;
 }
+
+[x-cloak] {
+    display: none !important;
+}

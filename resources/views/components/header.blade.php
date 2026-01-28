@@ -25,24 +25,7 @@
                 @auth
                     @include('livewire.notifications.notification-menu')
 
-                    <div class="user-menu">
-                        <button class="user-avatar-btn" onclick="toggleUserMenu(event)">
-                            <img
-                                src="{{ auth()->user()->avatar ? asset(auth()->user()->avatar) : asset('images/default-avatar.png') }}">
-                        </button>
-
-                        <div class="user-dropdown" id="userDropdown">
-                            <a href="{{ route('user.profile', auth()->user()->username) }}">Profile</a>
-                            <a href="{{ route('profile.edit') }}">Edit Profile</a>
-
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="logout-btn">
-                                    Sign out
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    @include('livewire.user.dropdown-user')
                 @else
                     <a href="{{ route('login') }}">
                         <i class='bx bx-user icon-log'></i>

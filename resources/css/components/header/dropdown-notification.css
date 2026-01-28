@@ -17,7 +17,7 @@
 /* BADGE */
 .notification-badge {
     position: absolute;
-    top: -4px;
+    top: 5px;
     right: -6px;
     background: #e11d48;
     /* rojo */
@@ -32,7 +32,7 @@
 /* DROPDOWN */
 .notification-dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: 100%;
     right: 0;
     width: 260px;
     background: #fff;
@@ -79,4 +79,15 @@
 
 .notification-dropdown .view-more:hover {
     text-decoration: underline;
+}
+
+/* ICONO */
+.notification-icon {
+    font-size: 27px;
+}
+
+.hola {
+    display: flex;
+    align-items: center;
+    height: 45px;
 }

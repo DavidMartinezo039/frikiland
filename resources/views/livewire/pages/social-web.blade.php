@@ -17,12 +17,13 @@
     </x-header>
 
     <x-banner-categories>
-        <a href="{{ url('/social-web') }}" class="cat {{ request('feed', 'for_you') === 'for_you' ? 'active' : '' }}">
+        <a href="{{ route('social-web.for-you') }}"
+            class="cat {{ request()->routeIs('social-web.for-you') ? 'active' : '' }}">
             PARA TI
         </a>
 
-        <a href="{{ url('/social-web/following') }}"
-            class="cat {{ request()->is('social-web/following') ? 'active' : '' }}">
+        <a href="{{ route('social-web.following') }}"
+            class="cat {{ request()->routeIs('social-web.following') ? 'active' : '' }}">
             SIGUIENDO
         </a>
     </x-banner-categories>
