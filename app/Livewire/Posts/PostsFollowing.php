@@ -17,8 +17,8 @@ class PostsFollowing extends Component
 
     public function mount()
     {
-        if (! Auth::check()) {
-            redirect()->route('login')->send();
+        if (!Auth::check()) {
+            return redirect()->route('login');
         }
 
         $this->followingIds = Auth::user()

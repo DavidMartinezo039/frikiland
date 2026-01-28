@@ -16,9 +16,8 @@ Route::get('/shop-web', ShopWeb::class)
 Route::get('/social-web', SocialWeb::class)
     ->name('social-web');
 
-Route::get('/social-web/{feed}', SocialWeb::class)
-    ->whereIn('feed', ['for_you', 'following'])
-    ->name('social-web.feed');
+Route::get('/social-web/for_you', SocialWeb::class)
+    ->name('social-web.for-you');
 
 Route::get('/register', fn() => redirect()->route('login'))
     ->name('register');
@@ -28,6 +27,9 @@ Route::view('/dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/social-web/following', SocialWeb::class)
+        ->name('social-web.following');
+
     Route::get('/posts/{post}', ShowPost::class)
         ->name('posts.show');
 
