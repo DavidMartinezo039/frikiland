@@ -4,39 +4,89 @@ namespace App\Livewire\Notifications;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Post;
+use App\Models\PostComment;
 
 class NotificationMenu extends Component
 {
-    public $notifications = [];
+    public array $notifications = [];
     public int $unreadCount = 0;
 
     public function mount()
     {
-        if (!Auth::check()) return;
+        if (! Auth::check()) return;
 
         $this->loadNotifications();
     }
 
     public function loadNotifications()
     {
-        $this->notifications = Auth::user()
-            ->notifications()
-            ->latest()
-            ->take(5)
-            ->get();
+        $user = Auth::user();
 
-        $this->unreadCount = Auth::user()
-            ->unreadNotifications()
-            ->count();
+        $this->unreadCount = $user->unreadNotifications()->count();
+
+        $this->notifications = $user->unreadNotifications()
+            ->latest()
+            ->take(4)
+            ->get()
+            ->map(fn($notification) => $this->mapNotification($notification))
+            ->filter()
+            ->values()
+            ->toArray();
+    }
+
+    private function mapNotification($notification): ?array
+    {
+        $data = $notification->data;
+
+        if ($data['type'] === 'user_followed') {
+            $user = User::find($data['follower_id']);
+            if (! $user) return null;
+
+            return [
+                'type' => 'user_followed',
+                'user' => $user,
+                'url'  => route('user.profile', $user->username),
+                'time' => $notification->created_at->diffForHumans(),
+            ];
+        }
+
+        if ($data['type'] === 'content_favorited') {
+            $user = User::find($data['user_id']);
+            if (! $user) return null;
+
+            if ($data['model_type'] === Post::class) {
+                return [
+                    'type' => 'favorite_post',
+                    'user' => $user,
+                    'url'  => route('posts.show', $data['model_id']),
+                    'time' => $notification->created_at->diffForHumans(),
+                ];
+            }
+
+            if ($data['model_type'] === PostComment::class) {
+                $comment = PostComment::find($data['model_id']);
+                if (! $comment || ! $comment->post) return null;
+
+                return [
+                    'type' => 'favorite_comment',
+                    'user' => $user,
+                    'url'  => route('posts.show', $comment->post->id) . '#comment-' . $comment->id,
+                    'time' => $notification->created_at->diffForHumans(),
+                ];
+            }
+        }
+
+        return null;
     }
 
     public function markAllAsRead()
     {
         Auth::user()->unreadNotifications->markAsRead();
 
+        $this->notifications = [];
         $this->unreadCount = 0;
-
-        $this->loadNotifications();
     }
 
     public function render()

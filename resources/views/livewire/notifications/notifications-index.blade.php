@@ -10,26 +10,26 @@
     <div class="notifications-content">
         <ul class="notification-list-all">
             @forelse ($notifications as $notification)
-                @if ($notification->data['type'] === 'user_followed')
-                    @php
-                        $follower = \App\Models\User::find($notification->data['follower_id']);
-                    @endphp
+                <li class="notification-item-all {{ $notification['read'] ? 'read' : 'unread' }}">
+                    <a href="{{ $notification['url'] }}">
+                        <div class="wrap-user-notification">
+                            <img src="{{ asset($notification['user']->avatar) }}" class="img-notification-user"
+                                width="45" height="45">
 
-                    @if ($follower)
-                        <li class="notification-item-all {{ $notification->read_at ? 'read' : 'unread' }}">
-                            <a href="{{ route('user.profile', $follower->username) }}">
-                                <div class="wrap-user-notification">
-                                    <img src="{{ asset($follower->avatar) }}" class="img-notification-user" width="45px"
-                                        height="45px">
-                                    <strong>{{ $follower->name }}</strong> te ha seguido
-                                </div>
-                            </a>
-                            <span class="time">
-                                {{ $notification->created_at->diffForHumans() }}
-                            </span>
-                        </li>
-                    @endif
-                @endif
+                            <strong>{{ $notification['user']->name }}</strong>
+
+                            @if ($notification['type'] === 'user_followed')
+                                te ha seguido
+                            @elseif ($notification['type'] === 'favorite_post')
+                                le ha gustado tu post
+                            @elseif ($notification['type'] === 'favorite_comment')
+                                le ha gustado tu comentario
+                            @endif
+                        </div>
+                    </a>
+
+                    <span class="time">{{ $notification['time'] }}</span>
+                </li>
             @empty
                 <li class="notification-item-all empty">
                     No tienes notificaciones

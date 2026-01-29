@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use App\Notifications\ContentFavorited;
 
 class FavoriteContent extends Component
 {
@@ -28,19 +29,29 @@ class FavoriteContent extends Component
             return redirect()->route('login');
         }
 
+        $user = Auth::user();
+
         $favorite = $this->model
             ->favorites()
-            ->where('user_id', Auth::id())
+            ->where('user_id', $user->id)
             ->first();
 
         if ($favorite) {
             $favorite->delete();
             $this->isFavorite = false;
-        } else {
-            $this->model->favorites()->create([
-                'user_id' => Auth::id(),
-            ]);
-            $this->isFavorite = true;
+            return;
+        }
+
+        $this->model->favorites()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->isFavorite = true;
+
+        if ($this->model->user_id !== $user->id) {
+            $this->model->user->notify(
+                new ContentFavorited($user, $this->model)
+            );
         }
     }
 
