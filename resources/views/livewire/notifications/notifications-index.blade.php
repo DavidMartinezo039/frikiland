@@ -3,7 +3,7 @@
 
     <x-banner-categories>
         <a class="cat active" href="{{ route('notifications.index') }}" wire:navigate>
-            {{ __('NOTIFICATIONS') }}
+            NOTIFICATIONS
         </a>
     </x-banner-categories>
 
@@ -24,6 +24,9 @@
                                 le ha gustado tu post
                             @elseif ($notification['type'] === 'favorite_comment')
                                 le ha gustado tu comentario
+                            @elseif ($notification['type'] === 'content_replied')
+                                te ha respondido:
+                                <span class="excerpt">“{{ $notification['excerpt'] }}”</span>
                             @endif
                         </div>
                     </a>

@@ -15,7 +15,7 @@ class NotificationMenu extends Component
 
     public function mount()
     {
-        if (! Auth::check()) return;
+        if (!Auth::check()) return;
 
         $this->loadNotifications();
     }
@@ -40,9 +40,10 @@ class NotificationMenu extends Component
     {
         $data = $notification->data;
 
+        /* ========= FOLLOW ========= */
         if ($data['type'] === 'user_followed') {
             $user = User::find($data['follower_id']);
-            if (! $user) return null;
+            if (!$user) return null;
 
             return [
                 'type' => 'user_followed',
@@ -52,9 +53,10 @@ class NotificationMenu extends Component
             ];
         }
 
+        /* ========= FAVORITO ========= */
         if ($data['type'] === 'content_favorited') {
             $user = User::find($data['user_id']);
-            if (! $user) return null;
+            if (!$user) return null;
 
             if ($data['model_type'] === Post::class) {
                 return [
@@ -67,7 +69,7 @@ class NotificationMenu extends Component
 
             if ($data['model_type'] === PostComment::class) {
                 $comment = PostComment::find($data['model_id']);
-                if (! $comment || ! $comment->post) return null;
+                if (!$comment || !$comment->post) return null;
 
                 return [
                     'type' => 'favorite_comment',
@@ -76,6 +78,22 @@ class NotificationMenu extends Component
                     'time' => $notification->created_at->diffForHumans(),
                 ];
             }
+        }
+
+        /* ========= RESPUESTA ========= */
+        if ($data['type'] === 'content_replied') {
+            $user = User::find($data['user_id']);
+            $comment = PostComment::find($data['comment_id']);
+
+            if (!$user || !$comment || !$comment->post) return null;
+
+            return [
+                'type'    => 'content_replied',
+                'user'    => $user,
+                'url'     => route('posts.show', $comment->post->id) . '#comment-' . $comment->id,
+                'excerpt' => $data['excerpt'],
+                'time'    => $notification->created_at->diffForHumans(),
+            ];
         }
 
         return null;

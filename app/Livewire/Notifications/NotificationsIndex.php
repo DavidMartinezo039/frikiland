@@ -14,7 +14,7 @@ class NotificationsIndex extends Component
 
     public function mount()
     {
-        if (! Auth::check()) return;
+        if (!Auth::check()) return;
 
         $this->notifications = Auth::user()
             ->notifications()
@@ -27,13 +27,13 @@ class NotificationsIndex extends Component
         Auth::user()->unreadNotifications->markAsRead();
     }
 
-    private function mapNotification($notification)
+    private function mapNotification($notification): ?array
     {
         $data = $notification->data;
 
         if ($data['type'] === 'user_followed') {
             $user = User::find($data['follower_id']);
-            if (! $user) return null;
+            if (!$user) return null;
 
             return [
                 'type' => 'user_followed',
@@ -46,7 +46,7 @@ class NotificationsIndex extends Component
 
         if ($data['type'] === 'content_favorited') {
             $user = User::find($data['user_id']);
-            if (! $user) return null;
+            if (!$user) return null;
 
             if ($data['model_type'] === Post::class) {
                 return [
@@ -60,7 +60,7 @@ class NotificationsIndex extends Component
 
             if ($data['model_type'] === PostComment::class) {
                 $comment = PostComment::find($data['model_id']);
-                if (! $comment || ! $comment->post) return null;
+                if (!$comment || !$comment->post) return null;
 
                 return [
                     'type' => 'favorite_comment',
@@ -70,6 +70,22 @@ class NotificationsIndex extends Component
                     'time' => $notification->created_at->diffForHumans(),
                 ];
             }
+        }
+
+        if ($data['type'] === 'content_replied') {
+            $user = User::find($data['user_id']);
+            $comment = PostComment::find($data['comment_id']);
+
+            if (!$user || !$comment || !$comment->post) return null;
+
+            return [
+                'type'    => 'content_replied',
+                'user'    => $user,
+                'url'     => route('posts.show', $comment->post->id) . '#comment-' . $comment->id,
+                'excerpt' => $data['excerpt'],
+                'read'    => (bool) $notification->read_at,
+                'time'    => $notification->created_at->diffForHumans(),
+            ];
         }
 
         return null;

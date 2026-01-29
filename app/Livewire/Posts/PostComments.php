@@ -10,6 +10,8 @@ use App\Models\PostComment;
 use App\Models\Post;
 use App\Traits\HandlesPostMedia;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use App\Notifications\ContentReplied;
+
 
 class PostComments extends Component
 {
@@ -86,7 +88,7 @@ class PostComments extends Component
     {
         $this->validateContent('content');
 
-        PostComment::create([
+        $comment = PostComment::create([
             'post_id' => $this->postId,
             'user_id' => Auth::id(),
             'content' => $this->content,
@@ -95,9 +97,16 @@ class PostComments extends Component
 
         Post::where('id', $this->postId)->increment('comments_count');
 
+        $post = Post::find($this->postId);
+
+        if ($post && $post->user_id !== Auth::id()) {
+            $post->user->notify(
+                new ContentReplied(Auth::user(), $comment)
+            );
+        }
+
         $this->resetForm();
     }
-
 
     public function toggleReply(int $commentId)
     {
@@ -116,7 +125,7 @@ class PostComments extends Component
     {
         $this->validateContent('replyContent');
 
-        PostComment::create([
+        $reply = PostComment::create([
             'post_id'   => $this->postId,
             'user_id'   => Auth::id(),
             'parent_id' => $this->replyingToId,
@@ -125,6 +134,14 @@ class PostComments extends Component
         ]);
 
         Post::where('id', $this->postId)->increment('comments_count');
+
+        $parentComment = PostComment::find($this->replyingToId);
+
+        if ($parentComment && $parentComment->user_id !== Auth::id()) {
+            $parentComment->user->notify(
+                new ContentReplied(Auth::user(), $reply)
+            );
+        }
 
         $this->repliesToShow[$this->replyingToId] = 4;
 

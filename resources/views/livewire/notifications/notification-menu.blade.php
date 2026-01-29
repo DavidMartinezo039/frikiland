@@ -4,15 +4,13 @@
             <i class="bx bx-bell notification-icon"></i>
 
             @if ($unreadCount > 0)
-                <span class="notification-badge">
-                    {{ $unreadCount }}
-                </span>
+                <span class="notification-badge">{{ $unreadCount }}</span>
             @endif
         </div>
     </button>
 
-    <div x-show="open" x-transition x-cloak @click.away="open = false" @keydown.escape.window="open = false"
-        class="notification-dropdown">
+    <div x-show="open" x-transition x-cloak @click.away="open = false" class="notification-dropdown">
+
         <p class="dropdown-title">Notificaciones</p>
 
         <ul class="notification-list">
@@ -27,6 +25,9 @@
                             le ha gustado tu post
                         @elseif ($notification['type'] === 'favorite_comment')
                             le ha gustado tu comentario
+                        @elseif ($notification['type'] === 'content_replied')
+                            te ha respondido:
+                            <span class="excerpt">“{{ $notification['excerpt'] }}”</span>
                         @endif
                     </a>
 
