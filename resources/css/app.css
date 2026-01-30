@@ -37,6 +37,12 @@
     /* SETTINGS */
     @import './settings/change-password.css';
     @import './settings/content-privacy.css';
+
+    /* CHAT */
+    @import './chat/circle-chat.css';
+    @import './chat/chat-index.css';
+    @import './chat/chat-sidebar.css';
+    @import './chat/chat-window.css';
 }
 
 @source '../views';

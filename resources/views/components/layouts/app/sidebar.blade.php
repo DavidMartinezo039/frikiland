@@ -14,6 +14,20 @@
         {{ $slot }}
     </main>
 
+    <div class="mensajes">
+        <div class="circulo-mansajes">
+            @if (request()->routeIs('chat.*'))
+                <a href="{{ route('social-web.for-you') }}" aria-label="Ir al inicio">
+                    <i class="bx bxs-home"></i>
+                </a>
+            @else
+                <a href="{{ route('chat.index') }}" aria-label="Ir a chats">
+                    <i class="bx bx-chat"></i>
+                </a>
+            @endif
+        </div>
+    </div>
+
     <x-footer />
     @livewireScripts
 </body>

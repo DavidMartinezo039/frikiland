@@ -1,0 +1,50 @@
+.chat-name {
+    background-color: var(--color-negro-mas-claro);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    width: 300px;
+    padding: 15px;
+    color: var(--color-blanco);
+}
+
+.border-chat {
+    border-bottom: 1px solid var(--color-gris-oscuro);
+}
+
+.friend-icon {
+    font-size: 25px;
+}
+
+.friend-icon:hover {
+    color: var(--color-blanco);
+}
+
+.img-user {
+    display: flex;
+    align-items: flex-end;
+}
+
+.chat-name li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+}
+
+.chat-name img {
+    border-radius: 100%;
+}
+
+.chat-name a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.circulo-verde {
+    background-color: #45a366;
+    border-radius: 100%;
+    height: 10px;
+    width: 10px;
+    margin-left: -10px;
+}

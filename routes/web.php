@@ -3,11 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
-
 use App\Livewire\Pages\{SocialWeb, ShopWeb};
 use App\Livewire\Posts\ShowPost;
 use App\Livewire\User\{ProfileUser, ContentPrivacy};
 use App\Livewire\Notifications\NotificationsIndex;
+use App\Livewire\Chat\ChatIndex;
+use App\Livewire\Chat\ChatShow;
+use App\Http\Controllers\ChatStartController;
+
 
 Route::get('/', fn() => view('home'))
     ->name('home');
@@ -17,6 +20,9 @@ Route::get('/shop-web', ShopWeb::class)
 
 Route::redirect('/social-web', '/social-web/for-you')
     ->name('social-web');
+
+Route::get('/social-web/for-you', SocialWeb::class)
+    ->name('social-web.for-you');
 
 Route::middleware('auth')->group(function () {});
 
@@ -29,9 +35,6 @@ Route::view('/dashboard', 'dashboard')
 
 Route::middleware('auth')->group(function () {
     /* PAGES */
-    Route::get('/social-web/for-you', SocialWeb::class)
-        ->name('social-web.for-you');
-
     Route::get('/social-web/following', SocialWeb::class)
         ->name('social-web.following');
 
@@ -46,6 +49,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notifications', NotificationsIndex::class)
         ->name('notifications.index');
+
+    /* CHAT */
+    Route::get('/chat', ChatIndex::class)
+        ->name('chat.index');
+
+    Route::get('/chat/start/{user}', ChatStartController::class)
+        ->name('chat.start');
+
+    Route::get('/chat/{conversation}', ChatShow::class)
+        ->name('chat.show');
 
 
     /* SETTINGS */

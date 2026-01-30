@@ -1,0 +1,30 @@
+/* ==== BANNER CHAT ==== */
+.banner-categories-chat {
+    margin: 15px auto 20px;
+}
+
+.chat-main {
+    margin-inline: 200px;
+}
+
+/* ==== CONTENEDOR PRINCIPAL DEL CHAT (dentro del main) ==== */
+.chat-complete {
+    display: flex;
+    background-color: var(--color-negro-claro);
+    border-radius: 8px;
+    width: 100%;
+    height: 800px;
+}
+
+.chat-window {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    color: var(--color-blanco);
+    min-height: 0;
+}
+
+.friends {
+    margin: 10px;
+}

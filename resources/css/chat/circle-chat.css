@@ -1,0 +1,20 @@
+/* ==== CIRCULO CHAT ==== */
+.mensajes {
+    position: fixed;
+    top: 910px;
+    left: 1820px;
+}
+
+.circulo-mansajes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 65px;
+    background-color: var(--color-azul-claro);
+    border-radius: 100%;
+}
+
+.circulo-mansajes i {
+    font-size: 27px;
+}

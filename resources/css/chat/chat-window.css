@@ -1,0 +1,112 @@
+/* Mensajes */
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 10px;
+    margin-block: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-azul-claro) transparent;
+}
+
+.messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+    background-color: var(--color-azul-claro);
+    border-radius: 10px;
+}
+
+
+.message {
+    max-width: 70%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Mensaje recibido */
+.message.received {
+    background-color: var(--color-azul-claro);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    color: black;
+}
+
+/* Mensaje enviado */
+.message.sent {
+    background-color: var(--color-azul-oscuro);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+/* Input tipo buscador */
+.chat-input {
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-gris-oscuro);
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.chat-input button {
+    background-color: var(--color-azul-oscuro);
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-blanco);
+    font-size: 18px;
+}
+
+.send:hover {
+    color: var(--color-blanco);
+}
+
+.friend-connect {
+    padding: 10px;
+}
+
+.title-friend-chat p {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-gris-oscuro);
+}
+
+.friend-connect a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.friend-connect img {
+    border-radius: 100%;
+}
+
+/* NOMBRE DE USUARIO DEL CHAT */
+.name-user-chat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-gris-oscuro);
+}
+
+.name-user-chat img {
+    border-radius: 100%;
+}
