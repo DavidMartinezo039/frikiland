@@ -28,16 +28,16 @@ class UserSeeder extends Seeder
             'name' => 'Marta',
             'username' => 'marta',
             'email' => 'marta@gmail.com',
-            'password' => Hash::make('1234'),
-            'avatar' => 'images/avatars/avatar1.jpg',
+            'password' => Hash::make('123'),
+            'avatar' => 'images/avatars/avatar2.jpg',
         ]);
 
         User::factory()->create([
-            'name' => 'Otro',
-            'username' => 'otro',
-            'email' => 'otro@gmail.com',
-            'password' => Hash::make('asdf'),
-            'avatar' => 'images/avatars/avatar1.jpg',
+            'name' => 'Roberto',
+            'username' => 'roberto',
+            'email' => 'roberto@gmail.com',
+            'password' => Hash::make('123'),
+            'avatar' => 'images/avatars/avatar4.jpg',
         ]);
     }
 }

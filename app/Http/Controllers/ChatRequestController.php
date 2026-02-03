@@ -69,24 +69,15 @@ class ChatRequestController
             fn($q) => $q->where('users.id', $chatRequest->to_user_id)
         )->first();
 
-        if ($conversation && $conversation->status === 'pending') {
-            $conversation->update([
-                'status' => 'rejected',
-            ]);
+        if ($conversation) {
+            $conversation->delete();
         }
-
-        $chatRequest->update([
-            'status' => 'rejected',
-        ]);
 
         $chatRequest->fromUser->notify(
             new ChatRequestRejected($chatRequest)
         );
 
-        Auth::user()
-            ->notifications()
-            ->where('data->chat_request_id', $chatRequest->id)
-            ->update(['read_at' => now()]);
+        $chatRequest->delete();
 
         return redirect()->route('chat.index');
     }
