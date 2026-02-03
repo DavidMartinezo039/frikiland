@@ -10,6 +10,7 @@ use App\Livewire\Notifications\NotificationsIndex;
 use App\Livewire\Chat\ChatIndex;
 use App\Livewire\Chat\ChatShow;
 use App\Http\Controllers\ChatStartController;
+use App\Http\Controllers\ChatRequestController;
 
 
 Route::get('/', fn() => view('home'))
@@ -59,6 +60,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/chat/{conversation}', ChatShow::class)
         ->name('chat.show');
+
+    Route::post('/chat-requests/{chatRequest}/accept', [ChatRequestController::class, 'accept'])
+        ->name('chat-requests.accept');
+
+    Route::post('/chat-requests/{chatRequest}/reject', [ChatRequestController::class, 'reject'])
+        ->name('chat-requests.reject');
 
 
     /* SETTINGS */

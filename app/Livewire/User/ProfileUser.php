@@ -4,14 +4,20 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 use App\Models\User;
+use App\Models\ChatRequest;
+use App\Models\Conversation;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On;
 use Illuminate\Support\Collection;
 
 class ProfileUser extends Component
 {
     public User $user;
     public string $tab = 'posts';
+
+    /* ===== CHAT UI STATES ===== */
+    public bool $canRequestChat = false;
+    public bool $chatRequested = false;
+    public ?Conversation $conversation = null;
 
     protected $queryString = [
         'tab' => ['except' => 'posts'],
@@ -20,6 +26,42 @@ class ProfileUser extends Component
     public function mount(string $username): void
     {
         $this->user = User::where('username', $username)->firstOrFail();
+
+        $viewer = Auth::user();
+
+        if (! $viewer || $viewer->id === $this->user->id) {
+            return;
+        }
+
+        /* ¿Sigo al usuario? */
+        $isFollowing = $viewer->following()
+            ->where('followed_id', $this->user->id)
+            ->exists();
+
+        if (! $isFollowing) {
+            return;
+        }
+
+        /* ¿Ya existe conversación? */
+        $this->conversation = Conversation::whereHas(
+            'users',
+            fn($q) => $q->where('users.id', $viewer->id)
+        )->whereHas(
+            'users',
+            fn($q) => $q->where('users.id', $this->user->id)
+        )->first();
+
+        if ($this->conversation) {
+            return;
+        }
+
+        /* ¿Solicitud pendiente? */
+        $this->chatRequested = ChatRequest::where('from_user_id', $viewer->id)
+            ->where('to_user_id', $this->user->id)
+            ->where('status', 'pending')
+            ->exists();
+
+        $this->canRequestChat = ! $this->chatRequested;
     }
 
     public function setTab(string $tab): void

@@ -96,6 +96,49 @@ class NotificationMenu extends Component
             ];
         }
 
+        /* ========= SOLICITUD DE CHAT ========= */
+        if ($data['type'] === 'chat_request') {
+            $user = User::find($data['from_user_id']);
+            $conversationId = $data['conversation_id'] ?? null;
+
+            if (! $user || ! $conversationId) {
+                return null;
+            }
+
+            return [
+                'type' => 'chat_request',
+                'user' => $user,
+                'chat_request_id' => $data['chat_request_id'],
+                'conversation_id' => $conversationId,
+                'time' => $notification->created_at->diffForHumans(),
+            ];
+        }
+
+        /* ========= CHAT RECHAZADO ========= */
+        if ($data['type'] === 'chat_request_rejected') {
+            $user = User::find($data['from_user_id']);
+
+            if (! $user) return null;
+
+            return [
+                'type' => 'chat_request_rejected',
+                'user' => $user,
+                'time' => $notification->created_at->diffForHumans(),
+            ];
+        }
+
+        if ($data['type'] === 'chat_request_accepted') {
+            $user = User::find($data['from_user_id']);
+            if (! $user) return null;
+
+            return [
+                'type' => 'chat_request_accepted',
+                'user' => $user,
+                'conversation_id' => $data['conversation_id'],
+                'time' => $notification->created_at->diffForHumans(),
+            ];
+        }
+
         return null;
     }
 

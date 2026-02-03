@@ -9,12 +9,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Conversation extends Model
 {
-    protected $fillable = [];
+    protected $fillable = ['status'];
 
     /** Usuarios de la conversación */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function chatRequest()
+    {
+        return $this->hasOne(ChatRequest::class);
     }
 
     /** Mensajes */
@@ -27,5 +32,20 @@ class Conversation extends Model
     public function lastMessage()
     {
         return $this->hasOne(Message::class)->latestOfMany();
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->status === 'rejected';
     }
 }

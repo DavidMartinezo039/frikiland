@@ -1,16 +1,26 @@
 <div class="chat-window">
     @php
-        $otherUser = $conversation->users->where('id', '!=', auth()->id())->first();
+        $authUser = auth()->user();
+
+        // Usuario que inició la conversación
+        $initiator = $conversation->messages()->exists()
+            ? $conversation->messages()->first()->user
+            : $conversation->users->first();
+
+        // Usuario que debe aceptar o rechazar
+        $receiver = $conversation->users->where('id', '!=', $initiator->id)->first();
     @endphp
 
+    {{-- ================= CABECERA ================= --}}
     <div class="name-user-chat">
         <div class="img-user">
-            <img src="{{ asset($otherUser->avatar) }}" width="40">
+            <img src="{{ asset($receiver->avatar) }}" width="40">
             <div class="circulo-verde"></div>
         </div>
-        {{ $otherUser->name }}
+        {{ $receiver->name }}
     </div>
 
+    {{-- ================= MENSAJES ================= --}}
     <div class="messages">
         @foreach ($messages as $message)
             <div class="message {{ $message->user_id === auth()->id() ? 'sent' : 'received' }}">
@@ -19,11 +29,48 @@
         @endforeach
     </div>
 
-    <div class="chat-input">
-        <input type="text" wire:model.defer="content" wire:keydown.enter="send" placeholder="Escribe un mensaje…">
+    {{-- ================= ACEPTAR / RECHAZAR (solo receptor) ================= --}}
+    @if ($conversation->isPending() && auth()->id() === $receiver->id)
+        <div class="chat-request-actions">
+            <form method="POST" action="{{ route('chat-requests.accept', $conversation->chatRequest->id) }}">
+                @csrf
+                <button type="submit" class="btn-accept">
+                    Aceptar conversación
+                </button>
+            </form>
 
-        <button wire:click="send">
-            <i class="bx bx-send send"></i>
-        </button>
-    </div>
+            <form method="POST" action="{{ route('chat-requests.reject', $conversation->chatRequest->id) }}">
+                @csrf
+                <button type="submit" class="btn-reject">
+                    Rechazar conversación
+                </button>
+            </form>
+        </div>
+    @endif
+
+    {{-- ================= RECHAZADO ================= --}}
+    @if ($conversation->isRejected())
+        <div class="chat-blocked">
+            Esta conversación ha sido rechazada.
+        </div>
+    @endif
+
+    {{-- ================= ESPERANDO RESPUESTA (solo iniciador) ================= --}}
+    @if ($conversation->isPending() && auth()->id() === $initiator->id)
+        <div class="chat-pending">
+            Esperando respuesta del usuario…
+        </div>
+    @endif
+
+    {{-- ================= INPUT (activo o iniciador pendiente) ================= --}}
+    @if ($conversation->isActive() || ($conversation->isPending() && auth()->id() === $initiator->id))
+        <div class="chat-input">
+            <input type="text" wire:model.defer="content" wire:keydown.enter="send"
+                placeholder="Escribe un mensaje…">
+
+            <button wire:click="send">
+                <i class="bx bx-send send"></i>
+            </button>
+        </div>
+    @endif
 </div>

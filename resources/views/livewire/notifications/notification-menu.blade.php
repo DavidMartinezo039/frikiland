@@ -10,26 +10,43 @@
     </button>
 
     <div x-show="open" x-transition x-cloak @click.away="open = false" class="notification-dropdown">
-
         <p class="dropdown-title">Notificaciones</p>
 
         <ul class="notification-list">
             @forelse ($notifications as $notification)
                 <li class="notification-item unread">
-                    <a href="{{ $notification['url'] }}">
-                        <strong>{{ $notification['user']->name }}</strong>
 
-                        @if ($notification['type'] === 'user_followed')
-                            te ha seguido
-                        @elseif ($notification['type'] === 'favorite_post')
-                            le ha gustado tu post
-                        @elseif ($notification['type'] === 'favorite_comment')
-                            le ha gustado tu comentario
-                        @elseif ($notification['type'] === 'content_replied')
-                            te ha respondido:
-                            <span class="excerpt">“{{ $notification['excerpt'] }}”</span>
-                        @endif
-                    </a>
+                    @if ($notification['type'] === 'chat_request')
+                        <a href="{{ route('chat.show', $notification['conversation_id']) }}">
+                            <strong>{{ $notification['user']->name }}</strong>
+                            quiere iniciar una conversación contigo
+                        </a>
+                    @elseif ($notification['type'] === 'chat_request_accepted')
+                        <a href="{{ route('chat.show', $notification['conversation_id']) }}">
+                            <strong>{{ $notification['user']->name }}</strong>
+                            ha aceptado tu solicitud de conversación
+                        </a>
+                    @elseif ($notification['type'] === 'chat_request_rejected')
+                        <span>
+                            <strong>{{ $notification['user']->name }}</strong>
+                            ha rechazado tu solicitud de conversación
+                        </span>
+                    @else
+                        <a href="{{ $notification['url'] }}">
+                            <strong>{{ $notification['user']->name }}</strong>
+
+                            @if ($notification['type'] === 'user_followed')
+                                te ha seguido
+                            @elseif ($notification['type'] === 'favorite_post')
+                                le ha gustado tu post
+                            @elseif ($notification['type'] === 'favorite_comment')
+                                le ha gustado tu comentario
+                            @elseif ($notification['type'] === 'content_replied')
+                                te ha respondido:
+                                <span class="excerpt">“{{ $notification['excerpt'] }}”</span>
+                            @endif
+                        </a>
+                    @endif
 
                     <span class="time">{{ $notification['time'] }}</span>
                 </li>

@@ -2,20 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Services\ChatService;
+use App\Models\{User, ChatRequest, Conversation};
+use App\Notifications\ChatRequestReceived;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ChatStartController
 {
-    public function __invoke(
-        User $user,
-        ChatService $chatService
-    ) {
-        $conversation = $chatService->getPrivateConversation(
-            Auth::user(),
-            $user
-        );
+    use AuthorizesRequests;
+
+    public function __invoke(User $user)
+    {
+        $from = Auth::user();
+        $to   = $user;
+
+        $this->authorize('create', [ChatRequest::class, $to]);
+
+        $conversation = Conversation::create([
+            'status' => 'pending',
+        ]);
+
+        $conversation->users()->attach([$from->id, $to->id]);
+
+        $chatRequest = ChatRequest::create([
+            'from_user_id' => $from->id,
+            'to_user_id'   => $to->id,
+            'conversation_id' => $conversation->id,
+            'status' => 'pending',
+        ]);
+
+
+        $to->notify(new ChatRequestReceived($chatRequest));
 
         return redirect()->route('chat.show', $conversation);
     }

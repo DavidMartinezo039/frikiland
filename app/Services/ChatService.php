@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Carbon;
 
 class ChatService
 {
@@ -14,22 +15,19 @@ class ChatService
      */
     public function chatListForUser(User $user): Collection
     {
-        return $user->following->map(function (User $followed) use ($user) {
-            $conversation = Conversation::whereHas(
-                'users',
-                fn($q) => $q->where('user_id', $user->id)
-            )->whereHas(
-                'users',
-                fn($q) => $q->where('user_id', $followed->id)
-            )->with(['messages' => fn($q) => $q->latest()->limit(1)])
-                ->first();
-
-            return [
-                'user' => $followed,
-                'conversation' => $conversation,
-            ];
-        });
+        return Conversation::where('status', 'active')
+            ->whereHas('users', fn($q) => $q->where('users.id', $user->id))
+            ->with(['users', 'lastMessage'])
+            ->get()
+            ->map(function ($conversation) use ($user) {
+                return [
+                    'conversation' => $conversation,
+                    'user' => $conversation->users->firstWhere('id', '!=', $user->id),
+                    'lastMessage' => $conversation->lastMessage,
+                ];
+            });
     }
+
 
     /**
      * Obtener o crear conversación privada (1 a 1)
@@ -85,5 +83,15 @@ class ChatService
             ->get()
             ->reverse()
             ->values();
+    }
+
+    public function markAsRead(Conversation $conversation, User $user): void
+    {
+        $conversation->messages()
+            ->whereNull('read_at')
+            ->where('user_id', '!=', $user->id)
+            ->update([
+                'read_at' => Carbon::now(),
+            ]);
     }
 }

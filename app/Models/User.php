@@ -8,6 +8,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\ContentPrivacy;
+use App\Models\ChatRequest;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -47,19 +50,19 @@ class User extends Authenticatable
     }
 
     // Posts del usuario
-    public function posts()
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
     }
 
     // Posts favoritos
-    public function favorites()
+    public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class);
     }
 
     // Usuarios que sigo
-    public function following()
+    public function following(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -70,7 +73,7 @@ class User extends Authenticatable
     }
 
     // Usuarios que me siguen
-    public function followers()
+    public function followers(): BelongsToMany
     {
         return $this->belongsToMany(
             User::class,
@@ -82,7 +85,7 @@ class User extends Authenticatable
 
 
     // Privacidad
-    public function contentPrivacies()
+    public function contentPrivacies(): HasMany
     {
         return $this->hasMany(ContentPrivacy::class);
     }
@@ -133,7 +136,7 @@ class User extends Authenticatable
 
 
     // Posts compartidos
-    public function shares()
+    public function shares(): HasMany
     {
         return $this->hasMany(Share::class);
     }
@@ -158,13 +161,25 @@ class User extends Authenticatable
 
 
     // Chat
-    public function conversations()
+    public function conversations(): BelongsToMany
     {
         return $this->belongsToMany(Conversation::class);
     }
 
-    public function messages()
+    public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
+    }
+
+    /* Solicitudes ENVIADAS */
+    public function chatRequestsSent(): HasMany
+    {
+        return $this->hasMany(ChatRequest::class, 'from_user_id');
+    }
+
+    /* Solicitudes RECIBIDAS */
+    public function chatRequestsReceived(): HasMany
+    {
+        return $this->hasMany(ChatRequest::class, 'to_user_id');
     }
 }

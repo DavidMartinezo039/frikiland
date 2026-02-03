@@ -48,3 +48,14 @@
     width: 10px;
     margin-left: -10px;
 }
+
+.unread-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background: #ff3b3b;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
