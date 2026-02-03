@@ -25,15 +25,15 @@
 
                             {{-- CHAT --}}
                             @if ($conversation)
-                                <a href="{{ route('chat.show', $conversation) }}" class="btn-chat">
-                                    Ir al chat
+                                <a href="{{ route('chat.show', $conversation) }}" class="btn-post">
+                                    Enviar mensaje
                                 </a>
                             @elseif ($chatRequested)
-                                <button class="btn-chat disabled" disabled>
+                                <button class="btn-post disabled" disabled>
                                     Solicitud enviada
                                 </button>
                             @elseif ($canRequestChat)
-                                <a href="{{ route('chat.start', $user) }}" class="btn-chat">
+                                <a href="{{ route('chat.start', $user) }}" class="btn-post">
                                     Iniciar conversación
                                 </a>
                             @endif

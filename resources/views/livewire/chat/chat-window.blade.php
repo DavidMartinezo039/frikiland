@@ -35,14 +35,14 @@
             <form method="POST" action="{{ route('chat-requests.accept', $conversation->chatRequest->id) }}">
                 @csrf
                 <button type="submit" class="btn-accept">
-                    Aceptar conversación
+                    Aceptar
                 </button>
             </form>
 
             <form method="POST" action="{{ route('chat-requests.reject', $conversation->chatRequest->id) }}">
                 @csrf
                 <button type="submit" class="btn-reject">
-                    Rechazar conversación
+                    Rechazar
                 </button>
             </form>
         </div>

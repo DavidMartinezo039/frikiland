@@ -110,3 +110,20 @@
 .name-user-chat img {
     border-radius: 100%;
 }
+
+
+.chat-request-actions {
+    display: flex;
+    margin-left: auto;
+    gap: 16px;
+}
+
+.btn-accept,
+.btn-reject {
+    cursor: pointer;
+}
+
+.btn-accept:hover,
+.btn-reject:hover {
+    color: var(--color-azul-claro);
+}
