@@ -1,0 +1,55 @@
+.pending-sidebar {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.pending-item {
+    justify-content: space-between;
+}
+
+.pending-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pending-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.pending-actions button {
+    border: none;
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-accept {
+    background-color: #45a366;
+    color: #fff;
+}
+
+.btn-accept:hover {
+    background-color: #3b8c58;
+}
+
+.btn-reject {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.btn-reject:hover {
+    background-color: #c9302c;
+}
+
+.last-message.muted {
+    color: var(--color-gris-claro);
+    font-size: 13px;
+}

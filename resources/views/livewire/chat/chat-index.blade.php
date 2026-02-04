@@ -10,11 +10,8 @@
 
     <div class="chat-main">
         <div class="chat-complete">
-
-            {{-- SIDEBAR --}}
             <livewire:chat.chat-sidebar />
 
-            {{-- PANEL DERECHO --}}
             <div class="chat-window friends">
                 <div class="title-friend-chat">
                     <p>Conectado - 1</p>
@@ -22,6 +19,8 @@
 
                 <div class="friend-connect"></div>
             </div>
+
+            <livewire:chat.chat-pending-sidebar />
         </div>
     </div>
 </div>
