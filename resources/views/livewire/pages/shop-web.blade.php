@@ -18,8 +18,10 @@
 
 
     <x-banner-categories>
-        <a href="{{ route('shop-web') }}" class="cat active">PARA TI</a>
-        <a href="#" class="cat">SIGUIENDO</a>
+        <a href="{{ route('shop-web') }}" class="cat">Tienda</a>
+        <button x-on:click="$dispatch('filter-my-products')" class="cat">
+                    Mis artículos
+                </button>
     </x-banner-categories>
 
 

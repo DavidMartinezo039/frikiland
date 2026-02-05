@@ -15,6 +15,7 @@ class ProductFactory extends Factory
         $name = $this->faker->words(3, true);
 
         return [
+            'user_id' => 1, // Asignamos un user_id fijo para evitar problemas de integridad referencial
             'sku' => strtoupper(Str::random(8)),
             'name' => $name,
             'slug' => Str::slug($name) . '-' . Str::random(5),

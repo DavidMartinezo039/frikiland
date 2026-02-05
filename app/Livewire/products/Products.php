@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Product;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 
 class Products extends Component
@@ -29,15 +30,113 @@ class Products extends Component
 
     public $selected_product = null;
 
+    #[On('filter-my-products')]
+    public function my_products()
+    {
+        $this->resetPage(); // Importante: volver a la página 1 al filtrar
+        $this->view = 'my-products';
+    }
+
+    public function removeOldImage($index)
+{
+    // Obtenemos las imágenes actuales en un array
+    $images = $this->selected_product->images;
+    
+    // Eliminamos la del índice seleccionado
+    unset($images[$index]);
+    
+    // Reindexamos el array y lo guardamos de nuevo en el modelo temporalmente
+    $this->selected_product->images = array_values($images);
+}
+
+    public function editProduct($id)
+    {
+        $this->resetPage();
+       $this->selected_product = Product::findOrFail($id);
+    
+    // En lugar de fill(), asignamos manualmente 
+    // y dejamos 'images' como un array vacío para las NUEVAS fotos
+    $this->name = $this->selected_product->name;
+    $this->sku = $this->selected_product->sku;
+    $this->description = $this->selected_product->description;
+    $this->price = $this->selected_product->price;
+    $this->stock = $this->selected_product->stock;
+    $this->active = $this->selected_product->active;
+    
+    $this->images = []; // <--- ESTO ES VITAL: Limpia las fotos temporales
+    
+    $this->view = 'edit';
+    }
+
+    public function updateProduct()
+    {
+        $this->validate([
+            'name' => 'required|min:3',
+            'sku' => 'nullable|unique:products,sku,' . $this->selected_product->id,
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'images.*' => 'nullable|image|max:2048',
+        ]);
+
+        $product = Product::findOrFail($this->selected_product->id);
+
+        // Mantener imágenes actuales y añadir las nuevas
+        $imagePaths = $product->images ?? [];
+        if (!empty($this->images)) {
+            foreach ($this->images as $image) {
+                $imagePaths[] = $image->store('products', 'public');
+            }
+        }
+
+        $product->update([
+            'name' => $this->name,
+            'sku' => $this->sku,
+            'description' => $this->description,
+            'price' => $this->price,
+            'stock' => $this->stock,
+            'active' => $this->active,
+            'images' => $imagePaths,
+        ]);
+
+        session()->flash('message', '¡Producto actualizado correctamente!');
+        $this->backToIndex();
+    }
+
     public function showProduct($id)
     {
+        $this->resetPage();
+        // Forzamos la limpieza antes de cargar el nuevo
+        $this->selected_product = null; 
+        
+        // Cargamos el nuevo producto
         $this->selected_product = Product::findOrFail($id);
+        
+        // Cambiamos la vista
         $this->view = 'show';
+
+        // Opcional: Si usas paginación en la misma página, esto ayuda a resetear el estado
+        $this->dispatch('scroll-to-top');
     }
 
     public function createProduct()
     {
+        $this->resetPage();
         $this->view = 'create';
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = Product::where('user_id', auth()->id())->findOrFail($id);
+        
+        // Opcional: Eliminar imágenes del storage antes de borrar el producto
+        if($product->images) {
+            foreach($product->images as $path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+            }
+        }
+
+        $product->delete();
+        session()->flash('message', 'Producto eliminado correctamente.');
     }
 
     public function backToIndex()
@@ -57,6 +156,7 @@ class Products extends Component
         }
 
         Product::create([
+            'user_id' => auth()->id(),
             'sku'         => $this->sku,
             'name'        => $this->name,
             'slug'        => Str::slug($this->name) . '-' . rand(100, 999),
@@ -73,8 +173,20 @@ class Products extends Component
 
     public function render()
     {
+        // 1. Iniciamos la consulta base
+        $query = Product::latest();
+
+        // 2. Si la vista es 'my-products', aplicamos el filtro de usuario
+        if ($this->view === 'my-products') {
+            $query->where('user_id', auth()->id());
+        } else {
+            // En el Index principal, SOLO se ven los productos activos
+            $query->where('active', true);
+        }
+
+        // 3. ¡IMPORTANTE! Ejecutamos la consulta usando la variable $query
         return view('livewire.products.products', [
-            'products' => Product::latest()->paginate(8)
+            'products' => $query->paginate(8)
         ]);
     }
 }
