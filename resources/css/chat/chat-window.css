@@ -118,12 +118,12 @@
     gap: 16px;
 }
 
-.btn-accept,
-.btn-reject {
+.btn-accept-window,
+.btn-reject-window {
     cursor: pointer;
 }
 
-.btn-accept:hover,
-.btn-reject:hover {
+.btn-accept-window:hover,
+.btn-reject-window:hover {
     color: var(--color-azul-claro);
 }

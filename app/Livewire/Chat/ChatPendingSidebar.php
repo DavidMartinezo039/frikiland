@@ -5,6 +5,8 @@ namespace App\Livewire\Chat;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ChatRequest;
+use App\Notifications\ChatRequestAccepted;
+use App\Notifications\ChatRequestRejected;
 
 class ChatPendingSidebar extends Component
 {
@@ -21,7 +23,7 @@ class ChatPendingSidebar extends Component
 
     public function loadRequests()
     {
-        $this->requests = ChatRequest::with(['fromUser'])
+        $this->requests = ChatRequest::with(['fromUser', 'conversation'])
             ->where('to_user_id', Auth::id())
             ->where('status', 'pending')
             ->latest()
@@ -30,12 +32,47 @@ class ChatPendingSidebar extends Component
 
     public function accept($chatRequestId)
     {
-        return redirect()->route('chat-requests.accept', $chatRequestId);
+        $chatRequest = ChatRequest::where('id', $chatRequestId)
+            ->where('to_user_id', Auth::id())
+            ->where('status', 'pending')
+            ->firstOrFail();
+
+        $conversation = $chatRequest->conversation;
+
+        $conversation->update([
+            'status' => 'active',
+        ]);
+
+        $chatRequest->update([
+            'status' => 'accepted',
+        ]);
+
+        $chatRequest->fromUser->notify(
+            new ChatRequestAccepted($chatRequest)
+        );
+
+        $this->loadRequests();
+
+        return redirect()->route('chat.show', $conversation->id);
     }
 
     public function reject($chatRequestId)
     {
-        return redirect()->route('chat-requests.reject', $chatRequestId);
+        $chatRequest = ChatRequest::where('id', $chatRequestId)
+            ->where('to_user_id', Auth::id())
+            ->where('status', 'pending')
+            ->firstOrFail();
+
+        $conversation = $chatRequest->conversation;
+
+        $chatRequest->fromUser->notify(
+            new ChatRequestRejected($chatRequest)
+        );
+
+        $conversation->delete();
+        $chatRequest->delete();
+
+        $this->loadRequests();
     }
 
     public function render()

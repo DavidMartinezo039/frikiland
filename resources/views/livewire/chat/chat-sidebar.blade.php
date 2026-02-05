@@ -6,8 +6,10 @@
     <div class="border-chat">
         <ul>
             <li>
-                <i class="bx bx-group friend-icon"></i>
-                Conversaciones
+                <a href="{{ route('chat.index') }}">
+                    <i class="bx bx-group friend-icon"></i>
+                    Conversaciones
+                </a>
             </li>
         </ul>
     </div>

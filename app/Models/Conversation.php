@@ -4,8 +4,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, HasMany};
+use Illuminate\Database\Eloquent\Builder;
 
 class Conversation extends Model
 {
@@ -55,5 +55,22 @@ class Conversation extends Model
     public function isRejected(): bool
     {
         return $this->status === 'rejected';
+    }
+
+    public function scopeVisibleFor(Builder $query, User $user): Builder
+    {
+        return $query->whereHas(
+            'users',
+            fn($q) =>
+            $q->where('user_id', $user->id)
+        )->where(function ($q) use ($user) {
+            $q->where('status', 'active')->orWhere(function ($q) use ($user) {
+                $q->where('status', 'pending')->whereHas(
+                    'chatRequest',
+                    fn($qr) =>
+                    $qr->where('from_user_id', $user->id)
+                );
+            });
+        });
     }
 }

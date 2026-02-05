@@ -13,21 +13,22 @@ class ChatService
     /**
      * Lista de usuarios seguidos + conversación si existe
      */
-    public function chatListForUser(User $user): Collection
+    public function chatListForUser(User $user)
     {
-        return Conversation::where('status', 'active')
-            ->whereHas('users', fn($q) => $q->where('users.id', $user->id))
-            ->with(['users', 'lastMessage'])
-            ->get()
-            ->map(function ($conversation) use ($user) {
-                return [
-                    'conversation' => $conversation,
-                    'user' => $conversation->users->firstWhere('id', '!=', $user->id),
-                    'lastMessage' => $conversation->lastMessage,
-                ];
-            });
-    }
+        return Conversation::visibleFor($user)->with([
+            'users',
+            'messages' => fn($q) => $q->latest()->limit(1),
+        ])->get()->map(function ($conversation) use ($user) {
+            $otherUser = $conversation->users
+                ->firstWhere('id', '!=', $user->id);
 
+            return [
+                'conversation' => $conversation,
+                'user'         => $otherUser,
+                'lastMessage'  => $conversation->messages->first(),
+            ];
+        });
+    }
 
     /**
      * Obtener o crear conversación privada (1 a 1)

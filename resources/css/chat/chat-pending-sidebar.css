@@ -13,6 +13,10 @@
     gap: 10px;
 }
 
+.pending-text{
+    width: 105px !important;
+}
+
 .pending-actions {
     display: flex;
     gap: 6px;

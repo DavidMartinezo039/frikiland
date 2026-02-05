@@ -1,19 +1,18 @@
 <div class="chat-window">
     @php
         $authUser = auth()->user();
-
-        $initiator = $conversation->users->firstWhere('id', $conversation->initiator_id);
-
-        $receiver = $conversation->users->firstWhere('id', '!=', $conversation->initiator_id);
+        $otherUser = $conversation->users->firstWhere('id', '!=', $authUser->id);
+        $chatRequest = $conversation->chatRequest;
     @endphp
+
 
     {{-- ================= CABECERA ================= --}}
     <div class="name-user-chat">
         <div class="img-user">
-            <img src="{{ asset($receiver->avatar) }}" width="40">
+            <img src="{{ asset($otherUser->avatar) }}" width="40">
             <div class="circulo-verde"></div>
         </div>
-        {{ $receiver->name }}
+        {{ $otherUser->name }}
     </div>
 
     {{-- ================= MENSAJES ================= --}}
@@ -26,18 +25,18 @@
     </div>
 
     {{-- ================= ACEPTAR / RECHAZAR (solo receptor) ================= --}}
-    @if ($conversation->isPending() && auth()->id() === $receiver->id)
+    @if ($conversation->isPending() && $chatRequest && auth()->id() === $chatRequest->to_user_id)
         <div class="chat-request-actions">
-            <form method="POST" action="{{ route('chat-requests.accept', $conversation->chatRequest->id) }}">
+            <form method="POST" action="{{ route('chat-requests.accept', $chatRequest->id) }}">
                 @csrf
-                <button type="submit" class="btn-accept">
+                <button type="submit" class="btn-accept-window">
                     Aceptar
                 </button>
             </form>
 
-            <form method="POST" action="{{ route('chat-requests.reject', $conversation->chatRequest->id) }}">
+            <form method="POST" action="{{ route('chat-requests.reject', $chatRequest->id) }}">
                 @csrf
-                <button type="submit" class="btn-reject">
+                <button type="submit" class="btn-reject-window">
                     Rechazar
                 </button>
             </form>
@@ -52,14 +51,17 @@
     @endif
 
     {{-- ================= ESPERANDO RESPUESTA (solo iniciador) ================= --}}
-    @if ($conversation->isPending() && auth()->id() === $initiator->id)
+    @if ($conversation->isPending() && $chatRequest && auth()->id() === $chatRequest->from_user_id)
         <div class="chat-pending">
             Esperando respuesta del usuario…
         </div>
     @endif
 
+
     {{-- ================= INPUT (activo o iniciador pendiente) ================= --}}
-    @if ($conversation->isActive() || ($conversation->isPending() && auth()->id() === $initiator->id))
+    @if (
+        $conversation->isActive() ||
+            ($conversation->isPending() && $chatRequest && auth()->id() === $chatRequest->from_user_id))
         <div class="chat-input">
             <input type="text" wire:model.defer="content" wire:keydown.enter="send"
                 placeholder="Escribe un mensaje…">

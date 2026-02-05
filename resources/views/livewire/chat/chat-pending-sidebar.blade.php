@@ -12,28 +12,33 @@
         @forelse ($requests as $request)
             <li class="chat-item pending-item">
 
-                <div class="pending-content">
-                    <div class="img-user">
-                        <img src="{{ asset($request->fromUser->avatar) }}" width="40" height="40"
-                            alt="{{ $request->fromUser->name }}">
+                {{-- ENTRAR AL CHAT --}}
+                <a href="{{ route('chat.show', $request->conversation_id) }}">
+                    <div class="pending-content">
+                        <div class="img-user">
+                            <img src="{{ asset($request->fromUser->avatar) }}" width="40" height="40"
+                                alt="{{ $request->fromUser->name }}">
+                            <div class="circulo-verde"></div>
+                        </div>
 
-                        <div class="circulo-verde"></div>
+                        <div class="chat-info pending-text">
+                            <strong>{{ $request->fromUser->name }}</strong>
+                            <p class="last-message muted">
+                                Quiere iniciar una conversación
+                            </p>
+                        </div>
                     </div>
+                </a>
 
-                    <div class="chat-info">
-                        <strong>{{ $request->fromUser->name }}</strong>
-                        <p class="last-message muted">
-                            Quiere iniciar una conversación
-                        </p>
-                    </div>
-                </div>
-
+                {{-- ACCIONES --}}
                 <div class="pending-actions">
-                    <button wire:click="accept({{ $request->id }})" class="btn-accept" title="Aceptar conversación">
+                    <button type="button" wire:click.stop="accept({{ $request->id }})" class="btn-accept"
+                        title="Aceptar conversación">
                         ✓
                     </button>
 
-                    <button wire:click="reject({{ $request->id }})" class="btn-reject" title="Rechazar conversación">
+                    <button type="button" wire:click.stop="reject({{ $request->id }})" class="btn-reject"
+                        title="Rechazar conversación">
                         ✕
                     </button>
                 </div>
