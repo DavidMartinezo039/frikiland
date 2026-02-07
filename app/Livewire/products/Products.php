@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use App\Livewire\products\Cart;
 
 class Products extends Component
 {
@@ -169,6 +170,46 @@ class Products extends Component
 
         $this->reset(['name', 'sku', 'description', 'price', 'stock', 'images']);
         session()->flash('message', 'Producto creado con éxito.');
+    }
+
+
+#[On('addToCart')]
+public function addToCart($productId)
+{
+    if (!auth()->check()) {
+        $this->dispatch('notify', 'Inicia sesión para comprar');
+        return;
+    }
+
+    $product = Product::findOrFail($productId);
+    
+    // Obtenemos o creamos el carrito del usuario
+    $cart = \App\Models\Cart::firstOrCreate(['user_id' => auth()->id()]);
+
+    // Verificamos si ya existe para manejar la cantidad
+    $existing = $cart->products()->where('product_id', $productId)->first();
+
+    if ($existing) {
+        if ($existing->pivot->quantity < $product->stock) {
+            $cart->products()->updateExistingPivot($productId, [
+                'quantity' => $existing->pivot->quantity + 1
+            ]);
+        }
+    } else {
+        // syncWithoutDetaching añade el registro a cart_items sin borrar los otros
+        $cart->products()->attach($productId, [
+            'quantity' => 1,
+            'price_at_purchase' => $product->price
+        ]);
+    }
+
+    $this->dispatch('notify', '¡Añadido a tu carrito!');
+}
+
+    #[On('cart')]
+    public function showCartView()
+    {
+        $this->view = 'cart';
     }
 
     public function render()

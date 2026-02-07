@@ -23,5 +23,8 @@
                 </a>
             </div>
         @endauth
+    @elseif($view == 'cart')
+        {{-- Aquí renderizamos el componente independiente del carrito --}}
+        <livewire:products.cart />
     @endif
 </main>

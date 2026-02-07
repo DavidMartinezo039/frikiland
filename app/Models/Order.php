@@ -21,4 +21,9 @@ class Order extends Model
                     ->withPivot('quantity', 'price')
                     ->withTimestamps();
     }
+
+    public function items()
+{
+    return $this->hasMany(OrderItem::class);
+}
 }

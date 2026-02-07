@@ -63,10 +63,20 @@
             </div>
 
             <div class="flex flex-col gap-3">
-                <button class="w-full md:w-auto px-8 py-3 bg-blue-900 text-white rounded-lg font-bold hover:bg-blue-800 transition flex items-center justify-center gap-2">
-                    <i class="bx bx-cart-add text-xl"></i>
-                    Añadir al carrito
-                </button>
+                <div class="flex items-center gap-4 pt-6">
+                    @if($selected_product->stock > 0)
+                        <button 
+                            wire:click.prevent="$dispatch('addToCart', { productId: {{ $selected_product->id }} })"
+                            class="flex-1 md:flex-none px-12 py-4 bg-blue-900 text-white rounded-xl font-black uppercase tracking-widest hover:bg-blue-800 transition shadow-lg active:scale-95 flex items-center justify-center gap-3">
+                            <i class="bx bx-cart-add text-2xl"></i>
+                            Añadir al carrito
+                        </button>
+                    @else
+                        <button disabled class="flex-1 md:flex-none px-12 py-4 bg-gray-300 text-white rounded-xl font-black uppercase tracking-widest cursor-not-allowed">
+                            Sin Stock Disponible
+                        </button>
+                    @endif
+                </div>
                 
                 <p class="text-xs text-gray-400">
                     <i class="bx bx-package"></i> Stock disponible: {{ $selected_product->stock }} unidades
@@ -117,8 +127,13 @@
                          wire:key="related-{{ $related->id }}">
                         
                         <div class="aspect-square bg-white rounded-lg overflow-hidden border border-gray-200 mb-2 relative">
-                            <img src="{{ str_starts_with($related->images[0] ?? '', 'http') ? $related->images[0] : asset('storage/'.$related->images[0]) }}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            @php
+                                // Forzamos que sea un array si viene como string JSON
+                                $relatedImages = is_string($related->images) ? json_decode($related->images, true) : $related->images;
+                                $firstImage = $relatedImages[0] ?? 'no-image.png';
+                            @endphp
+                            <img src="{{ str_starts_with($firstImage, 'http') ? $firstImage : asset('storage/'.$firstImage) }}" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition"></div>
                         </div>
                         

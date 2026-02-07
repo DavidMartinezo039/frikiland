@@ -19,6 +19,14 @@ Route::get('/', fn() => view('home'))
 Route::get('/shop-web', ShopWeb::class)
     ->name('shop-web');
 
+Route::get('/payment/success', [App\Http\Controllers\PaymentController::class, 'success'])
+    ->name('payment.success')
+    ->middleware('auth');
+
+Route::get('/payment/cancel', function () {
+    return redirect()->route('shop-web')->with('error', 'Pago cancelado');
+})->name('payment.cancel');
+
 Route::redirect('/social-web', '/social-web/for-you')
     ->name('social-web');
 
