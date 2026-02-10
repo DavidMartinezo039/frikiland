@@ -38,35 +38,48 @@ class Products extends Component
         $this->view = 'my-products';
     }
 
+    public function mount()
+    {
+        $tab = request('tab');
+
+        if ($tab === 'mine') {
+            $this->view = 'my-products';
+        } elseif ($tab === 'cart') {
+            $this->view = 'cart';
+        } else {
+            $this->view = 'index';
+        }
+    }
+
     public function removeOldImage($index)
-{
-    // Obtenemos las imágenes actuales en un array
-    $images = $this->selected_product->images;
-    
-    // Eliminamos la del índice seleccionado
-    unset($images[$index]);
-    
-    // Reindexamos el array y lo guardamos de nuevo en el modelo temporalmente
-    $this->selected_product->images = array_values($images);
-}
+    {
+        // Obtenemos las imágenes actuales en un array
+        $images = $this->selected_product->images;
+
+        // Eliminamos la del índice seleccionado
+        unset($images[$index]);
+
+        // Reindexamos el array y lo guardamos de nuevo en el modelo temporalmente
+        $this->selected_product->images = array_values($images);
+    }
 
     public function editProduct($id)
     {
         $this->resetPage();
-       $this->selected_product = Product::findOrFail($id);
-    
-    // En lugar de fill(), asignamos manualmente 
-    // y dejamos 'images' como un array vacío para las NUEVAS fotos
-    $this->name = $this->selected_product->name;
-    $this->sku = $this->selected_product->sku;
-    $this->description = $this->selected_product->description;
-    $this->price = $this->selected_product->price;
-    $this->stock = $this->selected_product->stock;
-    $this->active = $this->selected_product->active;
-    
-    $this->images = []; // <--- ESTO ES VITAL: Limpia las fotos temporales
-    
-    $this->view = 'edit';
+        $this->selected_product = Product::findOrFail($id);
+
+        // En lugar de fill(), asignamos manualmente
+        // y dejamos 'images' como un array vacío para las NUEVAS fotos
+        $this->name = $this->selected_product->name;
+        $this->sku = $this->selected_product->sku;
+        $this->description = $this->selected_product->description;
+        $this->price = $this->selected_product->price;
+        $this->stock = $this->selected_product->stock;
+        $this->active = $this->selected_product->active;
+
+        $this->images = []; // <--- ESTO ES VITAL: Limpia las fotos temporales
+
+        $this->view = 'edit';
     }
 
     public function updateProduct()
@@ -107,11 +120,11 @@ class Products extends Component
     {
         $this->resetPage();
         // Forzamos la limpieza antes de cargar el nuevo
-        $this->selected_product = null; 
-        
+        $this->selected_product = null;
+
         // Cargamos el nuevo producto
         $this->selected_product = Product::findOrFail($id);
-        
+
         // Cambiamos la vista
         $this->view = 'show';
 
@@ -128,10 +141,10 @@ class Products extends Component
     public function deleteProduct($id)
     {
         $product = Product::where('user_id', auth()->id())->findOrFail($id);
-        
+
         // Opcional: Eliminar imágenes del storage antes de borrar el producto
-        if($product->images) {
-            foreach($product->images as $path) {
+        if ($product->images) {
+            foreach ($product->images as $path) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
             }
         }
@@ -173,38 +186,38 @@ class Products extends Component
     }
 
 
-#[On('addToCart')]
-public function addToCart($productId)
-{
-    if (!auth()->check()) {
-        $this->dispatch('notify', 'Inicia sesión para comprar');
-        return;
-    }
+    #[On('addToCart')]
+    public function addToCart($productId)
+    {
+        if (!auth()->check()) {
+            $this->dispatch('notify', 'Inicia sesión para comprar');
+            return;
+        }
 
-    $product = Product::findOrFail($productId);
-    
-    // Obtenemos o creamos el carrito del usuario
-    $cart = \App\Models\Cart::firstOrCreate(['user_id' => auth()->id()]);
+        $product = Product::findOrFail($productId);
 
-    // Verificamos si ya existe para manejar la cantidad
-    $existing = $cart->products()->where('product_id', $productId)->first();
+        // Obtenemos o creamos el carrito del usuario
+        $cart = \App\Models\Cart::firstOrCreate(['user_id' => auth()->id()]);
 
-    if ($existing) {
-        if ($existing->pivot->quantity < $product->stock) {
-            $cart->products()->updateExistingPivot($productId, [
-                'quantity' => $existing->pivot->quantity + 1
+        // Verificamos si ya existe para manejar la cantidad
+        $existing = $cart->products()->where('product_id', $productId)->first();
+
+        if ($existing) {
+            if ($existing->pivot->quantity < $product->stock) {
+                $cart->products()->updateExistingPivot($productId, [
+                    'quantity' => $existing->pivot->quantity + 1
+                ]);
+            }
+        } else {
+            // syncWithoutDetaching añade el registro a cart_items sin borrar los otros
+            $cart->products()->attach($productId, [
+                'quantity' => 1,
+                'price_at_purchase' => $product->price
             ]);
         }
-    } else {
-        // syncWithoutDetaching añade el registro a cart_items sin borrar los otros
-        $cart->products()->attach($productId, [
-            'quantity' => 1,
-            'price_at_purchase' => $product->price
-        ]);
-    }
 
-    $this->dispatch('notify', '¡Añadido a tu carrito!');
-}
+        $this->dispatch('notify', '¡Añadido a tu carrito!');
+    }
 
     #[On('cart')]
     public function showCartView()

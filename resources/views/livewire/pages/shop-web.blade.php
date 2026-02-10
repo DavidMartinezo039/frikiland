@@ -11,21 +11,33 @@
     </x-header>
 
     <x-banner-categories>
-        <a href="{{ route('shop-web') }}" class="cat">TIENDA</a>
+        <a href="{{ route('shop-web') }}" class="cat {{ request()->routeIs('shop-web') ? 'active' : '' }}">
+            TIENDA
+        </a>
 
-        <button x-on:click="$dispatch('filter-my-products')" class="cat">
-            MIS ARTICULOS
-        </button>
+        @auth
+            <a href="{{ route('shop-web.mine') }}" class="cat {{ request()->routeIs('shop-web.mine') ? 'active' : '' }}">
+                MIS ARTÍCULOS
+            </a>
+        @else
+            <a href="{{ route('login') }}" class="cat">
+                MIS ARTÍCULOS
+            </a>
+        @endauth
 
-        <button wire:click="$dispatch('cart')" class="cat flex items-center gap-2">
+        <a href="{{ route('shop-web.cart') }}"
+            class="cat flex items-center gap-2 {{ request()->routeIs('shop-web.cart') ? 'active' : '' }}">
             <i class="bx bx-cart"></i>
             CARRITO
-            {{-- Llamamos al mini-componente --}}
             <livewire:products.cart-counter />
-        </button>
+        </a>
     </x-banner-categories>
 
     <div class="content-web">
-        <livewire:products.products />
+        @if ($view === 'cart')
+            <livewire:products.cart />
+        @else
+            <livewire:products.products :view="$view" />
+        @endif
     </div>
 </div>

@@ -19,6 +19,9 @@ Route::get('/', fn() => view('home'))
 Route::get('/shop-web', ShopWeb::class)
     ->name('shop-web');
 
+Route::get('/shop-web/cart', ShopWeb::class)
+    ->name('shop-web.cart');
+
 Route::get('/payment/success', [App\Http\Controllers\PaymentController::class, 'success'])
     ->name('payment.success')
     ->middleware('auth');
@@ -43,6 +46,10 @@ Route::view('/dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    /* SHOP */
+    Route::get('/shop-web/my-products', ShopWeb::class)
+        ->name('shop-web.mine');
+
     /* PAGES */
     Route::get('/social-web/following', SocialWeb::class)
         ->name('social-web.following');
