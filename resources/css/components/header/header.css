@@ -31,7 +31,7 @@
 .title-header {
     font-size: 32px;
     font-weight: bold;
-    width: 222.43px;
+    width: 222px;
 }
 
 /* Icono Hamburguesa */
@@ -41,7 +41,6 @@
 }
 
 /* Buscador */
-/* CONTENEDOR */
 .search-wrapper {
     position: relative;
 }
@@ -103,6 +102,13 @@
     animation: fadeIn 0.15s ease;
 }
 
+.search-title {
+    padding-left: 2px;
+    border-bottom: 1px solid var(--color-gris-claro);
+    margin-inline: 10px;
+    color: var(--color-gris-oscuro);
+}
+
 /* Usuario */
 .search-user {
     display: flex;
@@ -148,6 +154,35 @@
     }
 }
 
+.search-post-link {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 10px 14px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.search-post-link i {
+    color: var(--color-azul-oscuro);
+}
+
+.search-post-link:hover {
+    background-color: var(--color-gris-muy-claro);
+}
+
+.back {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 16px;
+}
+
+.back:hover {
+    color: var(--color-azul-oscuro);
+}
+
 /* ---- BOTÓN HAMBURGUESA ---- */
 .menu {
     font-size: 28px;
@@ -191,5 +226,7 @@
 
 .auth-nav {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
+    width: 222px;
 }

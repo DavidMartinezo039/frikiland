@@ -9,6 +9,7 @@ use App\Livewire\User\{ProfileUser, ContentPrivacy};
 use App\Livewire\Notifications\NotificationsIndex;
 use App\Livewire\Chat\ChatIndex;
 use App\Livewire\Chat\ChatShow;
+use App\Livewire\SearchPosts;
 use App\Http\Controllers\ChatStartController;
 use App\Http\Controllers\ChatRequestController;
 
@@ -35,6 +36,10 @@ Route::redirect('/social-web', '/social-web/for-you')
 
 Route::get('/social-web/for-you', SocialWeb::class)
     ->name('social-web.for-you');
+
+Route::get('/search/posts', SearchPosts::class)
+    ->name('search.posts');
+
 
 Route::middleware('auth')->group(function () {});
 
