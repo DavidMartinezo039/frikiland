@@ -15,6 +15,7 @@ class Products extends Component
     use WithFileUploads;
     use WithPagination;
 
+    public $search = '';
     public $view = 'index'; // Valores: index, show, create, edit
 
     public $name, $sku, $description, $price = 0, $stock = 0, $active = true;
@@ -31,6 +32,13 @@ class Products extends Component
 
     public $selected_product = null;
 
+    #[On('search-products')]
+    public function updateSearch($search)
+    {
+        $this->search = $search;
+        $this->resetPage();
+    }
+
     #[On('filter-my-products')]
     public function my_products()
     {
@@ -41,6 +49,7 @@ class Products extends Component
     public function mount()
     {
         $tab = request('tab');
+        $this->search = '';
 
         if ($tab === 'mine') {
             $this->view = 'my-products';
@@ -227,18 +236,18 @@ class Products extends Component
 
     public function render()
     {
-        // 1. Iniciamos la consulta base
         $query = Product::latest();
 
-        // 2. Si la vista es 'my-products', aplicamos el filtro de usuario
         if ($this->view === 'my-products') {
             $query->where('user_id', auth()->id());
         } else {
-            // En el Index principal, SOLO se ven los productos activos
             $query->where('active', true);
         }
 
-        // 3. ¡IMPORTANTE! Ejecutamos la consulta usando la variable $query
+        if ($this->search) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        }
+
         return view('livewire.products.products', [
             'products' => $query->paginate(8)
         ]);
