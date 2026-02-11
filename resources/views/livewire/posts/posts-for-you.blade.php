@@ -1,16 +1,10 @@
 <div>
     @auth
-        @include('livewire.posts.partials.create-post')
+        <x-post-editor content-model="content" new-media-model="newMedia" :media="$media" submit="addPost"
+            placeholder="¿Qué estás pensando?" button-text="Publicar" :avatar="Auth::user()->avatar" remove-method="removeTempMedia" />
     @endauth
 
-    <section x-data="{ loading: false }" x-init="window.addEventListener('scroll', () => {
-        if (loading || !@entangle('hasMore')) return;
-
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-            loading = true;
-            $wire.loadPosts().then(() => loading = false);
-        }
-    })">
+    <x-infinite-scroll :has-more="$hasMore" load-method="loadPosts">
         @foreach ($posts as $post)
             @include('livewire.posts.partials.post-item', ['post' => $post])
         @endforeach
@@ -24,11 +18,5 @@
         @if ($deletingPost)
             @include('livewire.posts.modals.delete-post')
         @endif
-
-        @if ($hasMore)
-            <div class="text-center py-4 text-gray-500">
-                Cargando más posts…
-            </div>
-        @endif
-    </section>
+    </x-infinite-scroll>
 </div>

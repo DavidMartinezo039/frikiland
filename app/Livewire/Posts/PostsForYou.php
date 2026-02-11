@@ -11,7 +11,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Post;
 use App\Traits\HandlesPostMedia;
 use App\Events\PostCreated;
-use App\Models\Hashtag;
 
 class PostsForYou extends Component
 {
@@ -88,15 +87,7 @@ class PostsForYou extends Component
             'media'   => $this->storeMedia($this->media),
         ]);
 
-        preg_match_all('/#(\w+)/', $this->content, $matches);
-
-        foreach ($matches[1] as $tag) {
-            $hashtag = Hashtag::firstOrCreate([
-                'name' => strtolower($tag)
-            ]);
-
-            $post->hashtags()->syncWithoutDetaching([$hashtag->id]);
-        }
+        $this->syncHashtags($post, $this->content);
 
         event(new PostCreated($post));
 
@@ -118,9 +109,9 @@ class PostsForYou extends Component
 
     public function updatedNewEditMedia()
     {
-        $this->handleMediaUpload($this->media, $this->newMedia, 'media');
+        $this->handleMediaUpload($this->editMedia, $this->newEditMedia, 'media');
 
-        $this->newMedia = [];
+        $this->newEditMedia = [];
     }
 
     public function removeEditMedia($index)
@@ -198,6 +189,8 @@ class PostsForYou extends Component
 
     public function render()
     {
-        return view('livewire.posts.posts-for-you');
+        return view('livewire.posts.posts-for-you', [
+            'context' => 'for-you',
+        ]);
     }
 }
