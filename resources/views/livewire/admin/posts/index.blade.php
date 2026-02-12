@@ -22,7 +22,7 @@
         </div>
 
         <div class="admin-pagination">
-            {{ $posts->links() }}
+            {{ $posts->links('livewire.pagination.pagination') }}
         </div>
 
         @include('livewire.admin.posts.partials.delete-modal')

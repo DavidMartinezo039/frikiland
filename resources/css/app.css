@@ -22,6 +22,7 @@
 
     /* LOGIN */
     @import './login.css';
+    @import './pagination/pagination.css';
 
     /* USERS */
     @import './users/profile.css';
@@ -53,7 +54,10 @@
 
     /* ADMIN */
     @import './admin/admin-dashboard.css';
+    @import './admin/admin-indexs.css';
     @import './admin/posts/index.css';
+    @import './admin/users/index.css';
+    @import './admin/comments/index.css';
 }
 
 @source '../views';

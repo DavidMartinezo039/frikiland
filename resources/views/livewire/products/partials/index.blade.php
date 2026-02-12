@@ -59,7 +59,7 @@
 
     {{-- LINKS DE PAGINACIÓN --}}
     <div style="margin-top: 30px;">
-        {{ $products->links() }}
+        {{ $products->links('livewire.pagination.pagination') }}
     </div>
 
     @if ($products->isEmpty())

@@ -1,12 +1,12 @@
 <table class="admin-table">
     <thead>
         <tr>
-            <th>User</th>
-            <th>Comment</th>
-            <th>Post</th>
-            <th>Replies</th>
-            <th>Date</th>
-            <th>Action</th>
+            <th class="col-user-c">User</th>
+            <th class="col-comment-c">Comment</th>
+            <th class="col-post-c">Post</th>
+            <th class="col-replies-c">Replies</th>
+            <th class="col-date-c">Date</th>
+            <th class="col-actions-c">Action</th>
         </tr>
     </thead>
 
@@ -15,7 +15,13 @@
             <tr>
                 <td>
                     <a href="{{ route('user.profile', $comment->user->username) }}" class="admin-link">
-                        {{ $comment->user->name }}
+                        <div class="wrap-user-admin">
+                            <img src="{{ asset($comment->user->avatar) }}" class="profile-avatar">
+                            <div class="profile-user-admin">
+                                {{ $comment->user->name }}
+                                <span>{{ '@' . $comment->user->username }}</span>
+                            </div>
+                        </div>
                     </a>
                 </td>
 
@@ -51,7 +57,7 @@
                 </td>
 
                 <td>
-                    {{ $comment->created_at->format('d/m/Y H:i') }}
+                    {{ $comment->created_at->format('d/m/Y') }}
                 </td>
 
                 <td>

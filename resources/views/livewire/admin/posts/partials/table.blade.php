@@ -1,12 +1,12 @@
 <table class="admin-table">
     <thead>
         <tr>
-            <th>User</th>
-            <th>Content</th>
-            <th>Media</th>
-            <th>Comments</th>
-            <th>Date</th>
-            <th>Actions</th>
+            <th class="col-user-p">User</th>
+            <th class="col-content-p">Content</th>
+            <th class="col-media-p">Media</th>
+            <th class="col-comments-p">Comments</th>
+            <th class="col-date-p">Date</th>
+            <th class="col-actions-p">Actions</th>
         </tr>
     </thead>
 
@@ -15,13 +15,19 @@
             <tr>
                 <td>
                     <a href="{{ route('user.profile', $post->user->username) }}" class="admin-link">
-                        {{ $post->user->name }}
+                        <div class="wrap-user-admin">
+                            <img src="{{ asset($post->user->avatar) }}" class="profile-avatar">
+                            <div class="profile-user-admin">
+                                {{ $post->user->name }}
+                                <span>{{ '@' . $post->user->username }}</span>
+                            </div>
+                        </div>
                     </a>
                 </td>
 
                 <td>
                     <a href="{{ route('posts.show', $post) }}" class="admin-link">
-                        {{ \Illuminate\Support\Str::limit($post->content, 80) }}
+                        {{ \Illuminate\Support\Str::limit($post->content, 75) }}
                     </a>
                 </td>
 

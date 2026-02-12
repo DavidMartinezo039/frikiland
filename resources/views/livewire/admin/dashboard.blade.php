@@ -38,7 +38,7 @@
                 Manage Comments
             </a>
 
-            <a class="admin-module module-users">
+            <a href="{{ route('admin.users') }}" class="admin-module module-users">
                 <i class="bx bx-group admin-icon"></i>
                 Manage Users
             </a>

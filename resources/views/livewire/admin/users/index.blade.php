@@ -2,30 +2,29 @@
     <x-header />
 
     <div class="admin-posts-container">
-
         <x-banner-categories>
             <a href="{{ route('manage') }}" class="cat">
                 ADMIN DASHBOARD
             </a>
 
-            <a href="{{ route('admin.comments') }}" class="cat active">
-                MANAGE COMMENTS
+            <a href="{{ route('admin.users') }}" class="cat active">
+                MANAGE USERS
             </a>
         </x-banner-categories>
 
         <div class="admin-search-wrapper">
-            <input type="text" wire:model.live="search" placeholder="Search comments..." class="admin-search-input">
+            <input type="text" wire:model.live="search" placeholder="Search users..." class="admin-search-input">
             <i class="bx bx-search"></i>
         </div>
 
         <div class="admin-table-wrapper">
-            @include('livewire.admin.comments.partials.table')
+            @include('livewire.admin.users.partials.table')
         </div>
 
         <div class="admin-pagination">
-            {{ $comments->links('livewire.pagination.pagination') }}
+            {{ $users->links('livewire.pagination.pagination') }}
         </div>
 
-        @include('livewire.admin.comments.partials.delete-modal')
+        @include('livewire.admin.users.partials.delete-modal')
     </div>
 </div>
