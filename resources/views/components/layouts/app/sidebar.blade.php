@@ -39,7 +39,12 @@
                         </a>
                     @endif
                 @endif
+            @else
+                <a href="{{ route('login') }}" aria-label="Ir a login">
+                    <i class="bx bx-chat"></i>
+                </a>
             @endauth
+
         </div>
     </div>
 

@@ -28,7 +28,7 @@
 
         <!-- MODULE LINKS -->
         <div class="admin-modules">
-            <a class="admin-module module-posts">
+            <a href="{{ route('admin.posts') }}" class="admin-module module-posts">
                 <i class="bx bx-news admin-icon"></i>
                 Manage Posts
             </a>

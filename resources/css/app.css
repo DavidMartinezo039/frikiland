@@ -53,6 +53,7 @@
 
     /* ADMIN */
     @import './admin/admin-dashboard.css';
+    @import './admin/posts/index.css';
 }
 
 @source '../views';
