@@ -16,15 +16,30 @@
 
     <div class="mensajes">
         <div class="circulo-mansajes">
-            @if (request()->routeIs('chat.*'))
-                <a href="{{ route('social-web.for-you') }}" aria-label="Ir al inicio">
-                    <i class="bx bxs-home"></i>
-                </a>
-            @else
-                <a href="{{ route('chat.index') }}" aria-label="Ir a chats">
-                    <i class="bx bx-chat"></i>
-                </a>
-            @endif
+
+            @auth
+                @if (auth()->user()->hasRole('admin'))
+                    @if (request()->is('manage'))
+                        <a href="{{ route('social-web.for-you') }}" aria-label="Ir al inicio">
+                            <i class="bx bxs-home"></i>
+                        </a>
+                    @else
+                        <a href="{{ route('manage') }}" aria-label="Ir al panel admin">
+                            <i class="bx bx-cog"></i>
+                        </a>
+                    @endif
+                @else
+                    @if (request()->routeIs('chat.*'))
+                        <a href="{{ route('social-web.for-you') }}" aria-label="Ir al inicio">
+                            <i class="bx bxs-home"></i>
+                        </a>
+                    @else
+                        <a href="{{ route('chat.index') }}" aria-label="Ir a chats">
+                            <i class="bx bx-chat"></i>
+                        </a>
+                    @endif
+                @endif
+            @endauth
         </div>
     </div>
 
