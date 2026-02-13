@@ -41,6 +41,10 @@ class CommentItem extends Component
     /* REPLY */
     public function toggleReply()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
         $this->isReplying = ! $this->isReplying;
     }
 

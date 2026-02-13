@@ -42,6 +42,11 @@ Route::prefix('social-web')->group(function () {
         ->name('social-web.for-you');
 });
 
+Route::prefix('posts')->group(function () {
+    Route::get('/{post}', ShowPost::class)
+        ->name('posts.show');
+});
+
 Route::prefix('search')->group(function () {
     Route::get('/posts', SearchPosts::class)
         ->name('search.posts');
@@ -69,11 +74,6 @@ Route::middleware('auth')->group(function () {
     Route::prefix('social-web')->group(function () {
         Route::get('/following', SocialWeb::class)
             ->name('social-web.following');
-    });
-
-    Route::prefix('posts')->group(function () {
-        Route::get('/{post}', ShowPost::class)
-            ->name('posts.show');
     });
 
     Route::prefix('user')->group(function () {

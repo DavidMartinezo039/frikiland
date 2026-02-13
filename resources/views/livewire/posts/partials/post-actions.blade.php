@@ -11,26 +11,28 @@
     <div class="right-content">
         <span>{{ $post->created_at->diffForHumans() }}</span>
 
-        <div x-data="{ open: false }" class="relative">
-            <button @click="open = !open" class="dots-vertical">
-                <i class="bx bx-dots-vertical-rounded"></i>
-            </button>
+        @auth
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open" class="dots-vertical">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
 
-            <div x-show="open" x-transition @click.away="open = false" class="modal-post">
-                @can('update', $post)
-                    <button wire:click="edit({{ $post->id }})" @click="open = false">
-                        <i class="bx bx-pencil"></i> Editar
-                    </button>
+                <div x-show="open" x-transition @click.away="open = false" class="modal-post">
+                    @can('update', $post)
+                        <button wire:click="edit({{ $post->id }})" @click="open = false">
+                            <i class="bx bx-pencil"></i> Editar
+                        </button>
 
-                    <button wire:click="confirmDelete({{ $post->id }})" @click="open = false" class="btn-delete-post">
-                        <i class="bx bx-trash"></i> Eliminar
-                    </button>
-                @else
-                    <button wire:click="$dispatch('openReportModal', {modelId: {{ $post->id }}, modelType: 'post'})">
-                        <i class="bx bx-flag"></i> Reportar
-                    </button>
-                @endcan
+                        <button wire:click="confirmDelete({{ $post->id }})" @click="open = false" class="btn-delete-post">
+                            <i class="bx bx-trash"></i> Eliminar
+                        </button>
+                    @else
+                        <button wire:click="$dispatch('openReportModal', {modelId: {{ $post->id }}, modelType: 'post'})">
+                            <i class="bx bx-flag"></i> Reportar
+                        </button>
+                    @endcan
+                </div>
             </div>
-        </div>
+        @endauth
     </div>
 </div>
