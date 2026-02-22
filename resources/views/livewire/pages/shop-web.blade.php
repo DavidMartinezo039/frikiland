@@ -11,14 +11,12 @@
         </a>
 
         @auth
+
+        @can('is-seller')
             <a href="{{ route('shop-web.mine') }}" class="cat {{ request()->routeIs('shop-web.mine') ? 'active' : '' }}">
                 MIS ARTÍCULOS
             </a>
-        @else
-            <a href="{{ route('login') }}" class="cat">
-                MIS ARTÍCULOS
-            </a>
-        @endauth
+        @endcan
 
         <a href="{{ route('shop-web.cart') }}"
             class="cat flex items-center gap-2 {{ request()->routeIs('shop-web.cart') ? 'active' : '' }}">
@@ -26,6 +24,8 @@
             CARRITO
             <livewire:products.cart-counter />
         </a>
+
+        @endauth
     </x-banner-categories>
 
     <div class="content-web">
