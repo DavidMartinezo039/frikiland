@@ -1,12 +1,7 @@
 <div>
     <x-header>
-        <x-slot:search>
-            <div class="search">
-                <input type="text" placeholder="Buscar…" aria-label="Buscar">
-                <button>
-                    <i class="bx bx-search"></i>
-                </button>
-            </div>
+        <x-slot:search>  
+            <livewire:products.product-search-header />
         </x-slot:search>
     </x-header>
 
