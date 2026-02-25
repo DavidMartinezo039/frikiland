@@ -1,8 +1,9 @@
 /* ==== CIRCULO CHAT ==== */
 .mensajes {
     position: fixed;
-    top: 910px;
-    left: 1820px;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
 }
 
 .circulo-mansajes {

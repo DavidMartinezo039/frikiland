@@ -22,15 +22,17 @@ class UserSeeder extends Seeder
             'avatar' => 'images/avatars/avatar1.jpg',
         ]);
 
-        $admin->assignRole('admin');
+        $admin->syncRoles(['admin']);
 
-        User::factory()->create([
+        $seller = User::factory()->create([
             'name' => 'David',
             'username' => 'david',
             'email' => 'david@example.com',
             'password' => Hash::make('asdf'),
             'avatar' => 'images/avatars/avatar1.jpg',
         ]);
+
+        $seller->syncRoles(['seller']);
 
         User::factory()->create([
             'name' => 'Marta',

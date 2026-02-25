@@ -74,17 +74,21 @@ class Index extends Component
 
     public function render()
     {
-        $users = User::withCount([
+        $users = User::with([
+            'roles',
+            'posts.reports',
+            'comments.reports'
+        ])
+        ->withCount([
             'posts',
             'comments'
         ])
-            ->with(['posts.reports', 'comments.reports'])
-            ->where(function ($query) {
-                $query->where('name', 'like', "%{$this->search}%")
-                    ->orWhere('username', 'like', "%{$this->search}%");
-            })
-            ->latest()
-            ->paginate(15);
+        ->where(function ($query) {
+            $query->where('name', 'like', "%{$this->search}%")
+                ->orWhere('username', 'like', "%{$this->search}%");
+        })
+        ->latest()
+        ->paginate(15);
 
         $users->getCollection()->transform(function ($user) {
 

@@ -29,13 +29,12 @@
                 <td>
                     <select wire:change="updateRole({{ $user->id }}, $event.target.value)" class="admin-select">
                         @foreach ($roles as $role)
-                            <option value="{{ $role }}" @selected($user->hasRole($role))>
+                            <option value="{{ $role }}"
+                                @selected($user->hasRole($role))>
                                 {{ ucfirst($role) }}
                             </option>
                         @endforeach
                     </select>
-                </td>
-
                 <td>
                     <span class="media-indicator">
                         <i class="bx bx-news"></i>
