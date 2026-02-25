@@ -46,26 +46,6 @@ class Products extends Component
         $this->view = 'my-products';
     }
 
-    public function mount()
-    {
-        $tab = request('tab');
-        $this->search = '';
-        $productId = request('product');
-
-        if ($productId) {
-            $this->showProduct($productId);
-            return;
-        }
-
-        if ($tab === 'mine') {
-            $this->view = 'my-products';
-        } elseif ($tab === 'cart') {
-            $this->view = 'cart';
-        } else {
-            $this->view = 'index';
-        }
-    }
-
     public function removeOldImage($index)
     {
         // Obtenemos las imágenes actuales en un array
@@ -80,6 +60,7 @@ class Products extends Component
 
     public function editProduct($id)
     {
+        $this->authorize('is-seller'); // Comprobación de seguridad
         $this->resetPage();
         $this->selected_product = Product::findOrFail($id);
 
@@ -99,6 +80,8 @@ class Products extends Component
 
     public function updateProduct()
     {
+        $this->authorize('is-seller'); // Comprobación de seguridad
+
         $this->validate([
             'name' => 'required|min:3',
             'sku' => 'nullable|unique:products,sku,' . $this->selected_product->id,
@@ -149,12 +132,16 @@ class Products extends Component
 
     public function createProduct()
     {
+        $this->authorize('is-seller'); // Comprobación de seguridad
+
         $this->resetPage();
         $this->view = 'create';
     }
 
     public function deleteProduct($id)
     {
+        $this->authorize('is-seller'); // Comprobación de seguridad
+
         $product = Product::where('user_id', auth()->id())->findOrFail($id);
 
         // Opcional: Eliminar imágenes del storage antes de borrar el producto
