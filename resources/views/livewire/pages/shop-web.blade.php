@@ -1,38 +1,38 @@
 <div>
     <x-header>
         <x-slot:search>
-            <livewire:products.product-search-header />
+            <div class="search">
+                <input type="text" placeholder="Buscar…" aria-label="Buscar">
+                <button>
+                    <i class="bx bx-search"></i>
+                </button>
+            </div>
         </x-slot:search>
     </x-header>
 
     <x-banner-categories>
-        <a href="{{ route('shop-web') }}" class="cat {{ request()->routeIs('shop-web') ? 'active' : '' }}">
-            TIENDA
-        </a>
+        <a href="{{ route('shop-web') }}" class="cat">TIENDA</a>
 
         @auth
-
+            
         @can('is-seller')
-            <a href="{{ route('shop-web.mine') }}" class="cat {{ request()->routeIs('shop-web.mine') ? 'active' : '' }}">
-                MIS ARTÍCULOS
-            </a>
+            
+        <button x-on:click="$dispatch('filter-my-products')" class="cat">
+            MIS ARTICULOS
+        </button>
         @endcan
 
-        <a href="{{ route('shop-web.cart') }}"
-            class="cat flex items-center gap-2 {{ request()->routeIs('shop-web.cart') ? 'active' : '' }}">
+        <button wire:click="$dispatch('cart')" class="cat flex items-center gap-2">
             <i class="bx bx-cart"></i>
             CARRITO
+            {{-- Llamamos al mini-componente --}}
             <livewire:products.cart-counter />
-        </a>
+        </button>
 
         @endauth
     </x-banner-categories>
 
     <div class="content-web">
-        @if ($view === 'cart')
-            <livewire:products.cart />
-        @else
-            <livewire:products.products :view="$view" />
-        @endif
+        <livewire:products.products />
     </div>
 </div>

@@ -110,8 +110,8 @@ class Products extends Component
             'images' => $imagePaths,
         ]);
 
-        session()->flash('message', '¡Producto actualizado correctamente!');
-        $this->backToIndex();
+        $this->resetPage();
+        $this->view = 'my-products';
     }
 
     public function showProduct($id)
@@ -184,7 +184,9 @@ class Products extends Component
         ]);
 
         $this->reset(['name', 'sku', 'description', 'price', 'stock', 'images']);
-        session()->flash('message', 'Producto creado con éxito.');
+
+        $this->resetPage();
+        $this->view = 'my-products';
     }
 
 

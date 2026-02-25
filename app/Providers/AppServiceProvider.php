@@ -22,11 +22,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('is-seller', function (User $user) {
-        // Opción A: Si tienes una columna 'role' en tu tabla users
-        return $user->role === 'seller' || $user->roles === 'admin';
-
-        // Opción B: Si usas el paquete Spatie Roles & Permissions
-        // return $user->hasRole('seller');
+        // Esto verifica si tiene el rol a través de la tabla de relaciones de Spatie
+        return $user->hasRole('seller') || $user->hasRole('admin');
     });
     }
 }

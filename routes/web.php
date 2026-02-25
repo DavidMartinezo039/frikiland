@@ -17,9 +17,6 @@ Route::get('/', fn() => view('home'))
 Route::prefix('shop-web')->group(function () {
     Route::get('/', ShopWeb::class)
         ->name('shop-web');
-
-    Route::get('/cart', ShopWeb::class)
-        ->name('shop-web.cart');
 });
 
 Route::prefix('payment')->group(function () {
@@ -66,10 +63,6 @@ Route::view('/dashboard', 'dashboard')
 
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('shop-web')->group(function () {
-        Route::get('/my-products', ShopWeb::class)
-            ->name('shop-web.mine');
-    });
 
     Route::prefix('social-web')->group(function () {
         Route::get('/following', SocialWeb::class)
